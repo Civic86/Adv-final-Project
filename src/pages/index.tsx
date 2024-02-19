@@ -1,4 +1,5 @@
 import { Box, Flex, Heading,SimpleGrid,Text } from '@chakra-ui/react';
+import Link from 'next/link';
 
 export default function Index(): JSX.Element {
   return (
@@ -16,14 +17,16 @@ export default function Index(): JSX.Element {
             <Text fontSize={40}>Nov 14</Text>
           </Flex>
           <SimpleGrid columns={2} spacing={10} width="80%">
-            <Box bg='tomato' textAlign="center" height={14}>Wind</Box>
-            <Box bg='tomato' textAlign="center" height={14}>Humidity</Box>
-            <Box bg='tomato' textAlign="center" height={14}>Visibility</Box>
-            <Box bg='tomato' textAlign="center" height={14}>Precipitation</Box>
+            <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14}>Wind</Box>
+            <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14}>Humidity</Box>
+            <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14}>Visibility</Box>
+            <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14}>Precipitation</Box>
           </SimpleGrid>
         </Flex>
         <Flex flex={1} bg="blue.100" alignItems="center" direction={'column'} justifyContent="center">
+          <Link href="/pokemon">
           <Box w={200} h={200} bg="green.100" borderRadius="50%"></Box>
+          </Link>
         </Flex>
       </Flex>
     </Box>
