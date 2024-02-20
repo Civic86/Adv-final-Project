@@ -15,7 +15,6 @@ export default function Index(): JSX.Element {
 
   const [currentDate, setCurrentDate] = useState('');
 
-
   const weatherIcons: Record<WeatherCondition, string> = {
     Clear: 'clear.png',
     Cloudy: 'cloudy,png',
@@ -23,6 +22,15 @@ export default function Index(): JSX.Element {
     Rain: 'rain.png',
     Snow: 'snow.png',
     Thunder: 'thunder.png'
+  };
+
+  const weatherBackgrounds: Record<WeatherCondition, string> = {
+    Clear: 'sun-background.png',
+    Cloudy: 'cloudy-background.png',
+    Drizzle: 'rain-background.png',
+    Rain: 'rain-background.png',
+    Snow: 'snow-background.png',
+    Thunder: 'thunder-background.png'
   };
 
   useEffect(() => {
@@ -36,7 +44,7 @@ export default function Index(): JSX.Element {
 
         setWeatherData({
           temp: Math.round(temp).toString(),
-          weather: main as WeatherCondition, 
+          weather: main as WeatherCondition,
         });
       } catch (error) {
         console.error('Failed to fetch weather data:', error);
@@ -52,9 +60,12 @@ export default function Index(): JSX.Element {
   }, []);
 
   return (
-    <Box>
+    <Box bgImage={`url(/images/${weatherBackgrounds[weatherData.weather]})`}
+      bgSize="cover"
+      bgPosition="center"
+      bgRepeat="no-repeat">
       <Flex color='white'>
-        <Flex flex={1} bg="red.100" alignItems="center" minH="100vh" direction={'column'}>
+        <Flex flex={1} alignItems="center" minH="100vh" direction={'column'}>
           <Text fontSize={40} mt={10}>Vancouver, BC</Text>
           <Flex alignItems="center" mt={-14} gap={10}>
             <Image
@@ -76,7 +87,7 @@ export default function Index(): JSX.Element {
             <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14} borderRadius='0.5em' backgroundColor='black' opacity='50%'>Precipitation</Box>
           </SimpleGrid>
         </Flex>
-        <Flex flex={1} bg="blue.100" alignItems="center" direction={'column'} justifyContent="center">
+        <Flex flex={1} alignItems="center" direction={'column'} justifyContent="center">
           <Link href="/pokemon">
             <Box w={200} h={200} bg="green.100" borderRadius="50%"></Box>
           </Link>
