@@ -39,7 +39,7 @@ export default function Index(): JSX.Element {
 
   return (
     <Box>
-      <Flex>
+      <Flex color='white'>
         <Flex flex={1} bg="red.100" alignItems="center" minH="100vh" direction={'column'}>
           <Text fontSize={40} mt={10}>Vancouver, BC</Text>
           <Flex alignItems="center" mt={-14} gap={10}>
@@ -51,10 +51,10 @@ export default function Index(): JSX.Element {
             <Text fontSize={40}>{currentDate}</Text>
           </Flex>
           <SimpleGrid columns={2} spacing={10} width="80%">
-            <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14}>Wind</Box>
-            <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14}>Humidity</Box>
-            <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14}>Visibility</Box>
-            <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14}>Precipitation</Box>
+            <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14} borderRadius='0.5em' backgroundColor='black' opacity='50%'>Wind</Box>
+            <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14} borderRadius='0.5em' backgroundColor='black' opacity='50%'>Humidity</Box>
+            <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14} borderRadius='0.5em' backgroundColor='black' opacity='50%'>Visibility</Box>
+            <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14} borderRadius='0.5em' backgroundColor='black' opacity='50%'>Precipitation</Box>
           </SimpleGrid>
         </Flex>
         <Flex flex={1} bg="blue.100" alignItems="center" direction={'column'} justifyContent="center">
