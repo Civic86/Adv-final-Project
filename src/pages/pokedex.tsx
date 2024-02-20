@@ -60,7 +60,7 @@ export default function Pokedex(): JSX.Element {
         ))}
       </SimpleGrid>
       {pokemons.length < 649 && ( 
-        <Button onClick={loadNextPage}>Load Next 100 Pokémon</Button>
+        <Button mb={125} ml={50} onClick={loadNextPage}>Load Next 100 Pokémon</Button>
       )}
       <Nav/>
     </div>

@@ -55,7 +55,6 @@ export default function Index(): JSX.Element {
 
     fetchWeather();
 
-    // 現在の日付を取得
     const date = new Date();
     const options = { weekday: 'long', month: 'short', day: 'numeric' } as const;
     setCurrentDate(date.toLocaleDateString('en-US', options));
