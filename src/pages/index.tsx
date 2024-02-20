@@ -112,7 +112,8 @@ export default function Index(): JSX.Element {
           <Text fontSize={40} fontWeight={600} mt={10}>Vancouver, BC</Text>
           <Flex alignItems="center" gap={10}>
             <Image
-              height={200}
+            
+              height={100}
               src={`/images/${weatherIcons[weatherData.weather]}`}
               alt={'weather icon'}
             />
