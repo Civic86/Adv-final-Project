@@ -70,10 +70,9 @@ export default function Index(): JSX.Element {
     };
 
     const loadRandomPokemonImage = async () => {
-      const pokemonType = getWeatherBasedPokemonType(weatherData.weather); // Get the Pokémon type based on the current weather
+      const pokemonType = getWeatherBasedPokemonType(weatherData.weather); 
       const pokemonImageUrl = await fetchRandomPokemonImage(pokemonType);
       if (pokemonImageUrl) {
-        // Update the UI to display the Pokémon's image
         setRandomPokemonImageUrl(pokemonImageUrl);
       }
     };
@@ -87,7 +86,6 @@ export default function Index(): JSX.Element {
   }, []);
 
   const getWeatherBasedPokemonType = (weather: WeatherCondition): string => {
-    // Map weather conditions to Pokémon types
     switch (weather) {
       case 'Clear':
         return 'normal', 'fire', 'fighting', 'flying';
@@ -101,7 +99,7 @@ export default function Index(): JSX.Element {
       case 'Thunder':
         return 'electric';
       default:
-        return 'normal'; // Default to normal type for unknown weather
+        return 'normal';
     }
   };
 
@@ -126,10 +124,10 @@ export default function Index(): JSX.Element {
           <Text fontSize={30}>{weatherData.weather}</Text>
           <Text fontSize={30} mt={-2} mb={6}>{currentDate}</Text>
           <SimpleGrid columns={2} spacing={10} width="80%">
-            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Wind</Flex>
-            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Humidity</Flex>
-            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Visibility</Flex>
-            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Precipitation</Flex>
+            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='rgba(0,0,0,0.5)' align='center' justify='center'>Wind</Flex>
+            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='rgba(0,0,0,0.5)' align='center' justify='center'>Humidity</Flex>
+            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='rgba(0,0,0,0.5)' align='center' justify='center'>Visibility</Flex>
+            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='rgba(0,0,0,0.5)' align='center' justify='center'>Precipitation</Flex>
           </SimpleGrid>
         </Flex>
         <Flex flex={1} alignItems="center" direction={'column'} justifyContent="center">
