@@ -1,12 +1,11 @@
-import { Box, Flex, Text, SimpleGrid } from '@chakra-ui/react';
+import { Box, Flex, Text, SimpleGrid, Image } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Nav from '@/components/Nav';
-import Image from 'next/image';
 import { Pokemon, Type } from 'pokeapi-typescript';
 
-type WeatherCondition = 'Clear' | 'Clouds' | 'Drizzle' | 'Rain' | 'Snow' | 'Thunderstorm' | 'Mist';
+type WeatherCondition = 'Clear' | 'Cloudy' | 'Drizzle' | 'Rain' | 'Snow' | 'Thunder';
 
 export default function Index(): JSX.Element {
   const [weatherData, setWeatherData] = useState({
@@ -19,12 +18,20 @@ export default function Index(): JSX.Element {
 
   const weatherIcons: Record<WeatherCondition, string> = {
     Clear: 'clear.png',
-    Clouds: 'cloudy.png',
+    Cloudy: 'cloudy,png',
     Drizzle: 'drizzle.png',
     Rain: 'rain.png',
     Snow: 'snow.png',
-    Thunderstorm: 'thunder.png',
-    Mist: 'atmosphere.png'
+    Thunder: 'thunder.png'
+  };
+
+  const weatherBackgrounds: Record<WeatherCondition, string> = {
+    Clear: 'sun-background.png',
+    Cloudy: 'cloudy-background.png',
+    Drizzle: 'rain-background.png',
+    Rain: 'rain-background.png',
+    Snow: 'snow-background.png',
+    Thunder: 'thunder-background.png'
   };
 
   const fetchRandomPokemonImage = async (pokemonType: string) => {
@@ -33,22 +40,11 @@ export default function Index(): JSX.Element {
       const pokemonOfType = typeData.pokemon.map((p) => p.pokemon);
       const randomPokemon = pokemonOfType[Math.floor(Math.random() * pokemonOfType.length)];
       const pokemonDetails = await Pokemon.fetch(randomPokemon.name);
-      return pokemonDetails.sprites.other['official-artwork'].front_default;
+      return pokemonDetails.sprites.versions['generation-v']['black-white'].animated.front_default;
     } catch (error) {
       console.error('Failed to fetch random Pokémon image:', error);
       return null;
     }
-  };
-
-
-  const weatherBackgrounds: Record<WeatherCondition, string> = {
-    Clear: 'sun-background.png',
-    Clouds: 'cloudy-background.png',
-    Drizzle: 'rain-background.png',
-    Rain: 'rain-background.png',
-    Snow: 'snow-background.png',
-    Thunderstorm: 'thunder-background.png',
-    Mist: 'atmosphere.png'
   };
 
   useEffect(() => {
@@ -70,10 +66,9 @@ export default function Index(): JSX.Element {
     };
 
     const loadRandomPokemonImage = async () => {
-      const pokemonType = getWeatherBasedPokemonType(weatherData.weather); // Get the Pokémon type based on the current weather
+      const pokemonType = getWeatherBasedPokemonType(weatherData.weather); 
       const pokemonImageUrl = await fetchRandomPokemonImage(pokemonType);
       if (pokemonImageUrl) {
-        // Update the UI to display the Pokémon's image
         setRandomPokemonImageUrl(pokemonImageUrl);
       }
     };
@@ -87,7 +82,6 @@ export default function Index(): JSX.Element {
   }, []);
 
   const getWeatherBasedPokemonType = (weather: WeatherCondition): string => {
-    // Map weather conditions to Pokémon types
     switch (weather) {
       case 'Clear':
         return 'normal', 'fire', 'fighting', 'flying';
@@ -101,40 +95,42 @@ export default function Index(): JSX.Element {
       case 'Thunder':
         return 'electric';
       default:
-        return 'normal'; // Default to normal type for unknown weather
+        return 'normal'; 
     }
   };
 
 
   return (
-    <Box bgImage={`/images/${weatherBackgrounds[weatherData.weather]}`}
+    <Box bgImage={`url(/images/${weatherBackgrounds[weatherData.weather]})`}
       bgSize="cover"
       bgPosition="center"
       bgRepeat="no-repeat">
       <Flex color='white'>
         <Flex flex={1} alignItems="center" minH="100vh" direction={'column'}>
-          <Text fontSize={40} fontWeight={600} mt={10}>Vancouver, BC</Text>
-          <Flex alignItems="center" gap={10}>
+          <Text fontSize={40} mt={10}>Vancouver, BC</Text>
+          <Flex alignItems="center" mt={-14} gap={10}>
             <Image
               width={150}
               height={200}
               src={`/images/${weatherIcons[weatherData.weather]}`}
               alt={'weather icon'}
             />
-            <Text fontSize={87} my={4}>{weatherData.temp}°C</Text>
+            <Text fontSize={167}>{weatherData.temp}°C</Text>
           </Flex>
-          <Text fontSize={30}>{weatherData.weather}</Text>
-          <Text fontSize={30} mt={-2} mb={6}>{currentDate}</Text>
+          <Text fontSize={40} mt={-14}>{weatherData.weather}</Text>
+          <Flex alignItems="center" gap={10}>
+            <Text fontSize={40}>{currentDate}</Text>
+          </Flex>
           <SimpleGrid columns={2} spacing={10} width="80%">
-            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Wind</Flex>
-            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Humidity</Flex>
-            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Visibility</Flex>
-            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Precipitation</Flex>
+            <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14} borderRadius='0.5em' backgroundColor='black' opacity='50%'>Wind</Box>
+            <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14} borderRadius='0.5em' backgroundColor='black' opacity='50%'>Humidity</Box>
+            <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14} borderRadius='0.5em' backgroundColor='black' opacity='50%'>Visibility</Box>
+            <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14} borderRadius='0.5em' backgroundColor='black' opacity='50%'>Precipitation</Box>
           </SimpleGrid>
         </Flex>
         <Flex flex={1} alignItems="center" direction={'column'} justifyContent="center">
-          <Link href="/pokemon">
-            {randomPokemonImageUrl && <img src={randomPokemonImageUrl} alt="Random Pokémon" />}
+          <Link href="/pokemon" >
+            {randomPokemonImageUrl && <img src={randomPokemonImageUrl} alt="Random Pokémon"/>}
           </Link>
         </Flex>
       </Flex>
