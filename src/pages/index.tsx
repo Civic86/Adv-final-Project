@@ -3,14 +3,25 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Nav from '@/components/Nav';
+import Image from 'next/image';
+
+type WeatherCondition = 'Clear' | 'Cloudy' | 'Rain' | 'Snow';
 
 export default function Index(): JSX.Element {
   const [weatherData, setWeatherData] = useState({
     temp: '',
-    weather: '',
+    weather: '' as WeatherCondition,
   });
 
   const [currentDate, setCurrentDate] = useState('');
+
+
+  const weatherIcons: Record<WeatherCondition, string> = {
+    Clear: 'clear.png',
+    Cloudy: 'cloudy,png',
+    Rain: 'rain.png',
+    Snow: 'snow.png',
+  };
 
   useEffect(() => {
     const fetchWeather = async () => {
@@ -23,7 +34,7 @@ export default function Index(): JSX.Element {
 
         setWeatherData({
           temp: Math.round(temp).toString(),
-          weather: main,
+          weather: main as WeatherCondition, 
         });
       } catch (error) {
         console.error('Failed to fetch weather data:', error);
@@ -44,7 +55,12 @@ export default function Index(): JSX.Element {
         <Flex flex={1} bg="red.100" alignItems="center" minH="100vh" direction={'column'}>
           <Text fontSize={40} mt={10}>Vancouver, BC</Text>
           <Flex alignItems="center" mt={-14} gap={10}>
-            <Box w={100} h={100} bg="green.100" borderRadius="50%" mt={10}></Box>
+            <Image
+              width={150}
+              height={200}
+              src={`/images/${weatherIcons[weatherData.weather]}`}
+              alt={'weather icon'}
+            />
             <Text fontSize={167}>{weatherData.temp}°C</Text>
           </Flex>
           <Text fontSize={40} mt={-14}>{weatherData.weather}</Text>
@@ -64,7 +80,7 @@ export default function Index(): JSX.Element {
           </Link>
         </Flex>
       </Flex>
-      <Nav/>
+      <Nav />
     </Box>
   );
 }
