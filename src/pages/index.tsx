@@ -2,6 +2,7 @@ import { Box, Flex, Text, SimpleGrid } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import Nav from '@/components/Nav';
 
 export default function Index(): JSX.Element {
   const [weatherData, setWeatherData] = useState({
@@ -63,6 +64,7 @@ export default function Index(): JSX.Element {
           </Link>
         </Flex>
       </Flex>
+      <Nav/>
     </Box>
   );
 }
