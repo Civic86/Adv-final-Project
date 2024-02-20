@@ -40,7 +40,7 @@ export default function Pokedex(): JSX.Element {
     window.scrollTo({ top: 0, behavior: 'auto' });
   };
 
-  return (  
+  return (
     <div>
       <Stack px={40} spacing={4} justifyContent='space-between' alignItems="center" flexDir='row' mt={10} mb={16}>
         <Text fontSize={30} fontWeight={600} color="#5AC9A1">Pokedex</Text>
