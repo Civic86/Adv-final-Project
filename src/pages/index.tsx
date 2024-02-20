@@ -5,7 +5,7 @@ import axios from 'axios';
 import Nav from '@/components/Nav';
 import Image from 'next/image';
 
-type WeatherCondition = 'Clear' | 'Clouds' | 'Drizzle' | 'Rain' | 'Snow' | 'Thunderstorm';
+type WeatherCondition = 'Clear' | 'Clouds' | 'Drizzle' | 'Rain' | 'Snow' | 'Thunderstorm' | 'Mist';
 
 export default function Index(): JSX.Element {
   const [weatherData, setWeatherData] = useState({
@@ -21,7 +21,8 @@ export default function Index(): JSX.Element {
     Drizzle: 'drizzle.png',
     Rain: 'rain.png',
     Snow: 'snow.png',
-    Thunderstorm: 'thunder.png'
+    Thunderstorm: 'thunder.png',
+    Mist: 'atmosphere.png'
   };
 
   const weatherBackgrounds: Record<WeatherCondition, string> = {
@@ -30,7 +31,8 @@ export default function Index(): JSX.Element {
     Drizzle: 'rain-background.png',
     Rain: 'rain-background.png',
     Snow: 'snow-background.png',
-    Thunderstorm: 'thunder-background.png'
+    Thunderstorm: 'thunder-background.png',
+    Mist: 'atmosphere.png'
   };
 
   useEffect(() => {
