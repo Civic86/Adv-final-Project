@@ -5,18 +5,17 @@ import axios from 'axios';
 import Nav from '@/components/Nav';
 import Image from 'next/image';
 
-// Define a type for the possible weather conditions
 type WeatherCondition = 'Clear' | 'Cloudy' | 'Rain' | 'Snow';
 
 export default function Index(): JSX.Element {
   const [weatherData, setWeatherData] = useState({
     temp: '',
-    weather: '' as WeatherCondition, // Set initial value to an empty string or a default value
+    weather: '' as WeatherCondition,
   });
 
   const [currentDate, setCurrentDate] = useState('');
 
-  // Define a mapping between weather conditions and icon filenames
+
   const weatherIcons: Record<WeatherCondition, string> = {
     Clear: 'clear.png',
     Cloudy: 'cloudy,png',
@@ -35,7 +34,7 @@ export default function Index(): JSX.Element {
 
         setWeatherData({
           temp: Math.round(temp).toString(),
-          weather: main as WeatherCondition, // Ensure that weather is of type WeatherCondition
+          weather: main as WeatherCondition, 
         });
       } catch (error) {
         console.error('Failed to fetch weather data:', error);
@@ -56,7 +55,6 @@ export default function Index(): JSX.Element {
         <Flex flex={1} bg="red.100" alignItems="center" minH="100vh" direction={'column'}>
           <Text fontSize={40} mt={10}>Vancouver, BC</Text>
           <Flex alignItems="center" mt={-14} gap={10}>
-            {/* Use the weatherIcons mapping to dynamically set the icon */}
             <Image
               width={150}
               height={200}
