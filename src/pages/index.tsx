@@ -42,7 +42,7 @@ export default function Index(): JSX.Element {
       const pokemonOfType = typeData.pokemon.map((p) => p.pokemon);
       const randomPokemon = pokemonOfType[Math.floor(Math.random() * pokemonOfType.length)];
       const pokemonDetails = await Pokemon.fetch(randomPokemon.name);
-      return pokemonDetails.sprites.versions['generation-v']['black-white'].animated.front_default;
+      return pokemonDetails.sprites.other['official-artwork'].front_default;
     } catch (error) {
       console.error('Failed to fetch random Pokémon image:', error);
       return null;
