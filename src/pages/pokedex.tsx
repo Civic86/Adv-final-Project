@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { SimpleGrid, Card, CardHeader, Heading, Image, Text, Button } from '@chakra-ui/react';
+import { SimpleGrid, Card, CardHeader, Heading, Image, Text, Button, Input, InputGroup, InputLeftElement, Stack } from '@chakra-ui/react';
 
 interface Pokemon {
   name: string;
@@ -38,8 +38,14 @@ export default function Pokedex(): JSX.Element {
     window.scrollTo({ top: 0, behavior: 'auto' });
   };
 
-  return (
+  return (  
     <div>
+        <Stack spacing={4} justifyContent="center" alignItems="center" mt={4}>
+            <InputGroup w={500}>
+                <Input type='string' placeholder='Search by Pokemon name, id' />
+            </InputGroup>
+        </Stack>
+
       <SimpleGrid columns={5} spacing={12} padding={40}>
         {pokemons.map(pokemon => (
           <Card key={pokemon.id} w={270} h={180} position="relative" boxShadow="0 4px 8px 0 rgba(0,0,0,0.2), 4px 0 8px 0 rgba(0,0,0,0.2)">
