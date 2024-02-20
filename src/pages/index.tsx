@@ -9,6 +9,8 @@ export default function Index(): JSX.Element {
     weather: '',
   });
 
+  const [currentDate, setCurrentDate] = useState('');
+
   useEffect(() => {
     const fetchWeather = async () => {
       try {
@@ -28,6 +30,11 @@ export default function Index(): JSX.Element {
     };
 
     fetchWeather();
+
+    // 現在の日付を取得
+    const date = new Date();
+    const options = { weekday: 'long', month: 'short', day: 'numeric' } as const;
+    setCurrentDate(date.toLocaleDateString('en-US', options));
   }, []);
 
   return (
@@ -41,8 +48,7 @@ export default function Index(): JSX.Element {
           </Flex>
           <Text fontSize={40} mt={-14}>{weatherData.weather}</Text>
           <Flex alignItems="center" gap={10}>
-            <Text fontSize={40}>Sunday</Text>
-            <Text fontSize={40}>Nov 14</Text>
+            <Text fontSize={40}>{currentDate}</Text>
           </Flex>
           <SimpleGrid columns={2} spacing={10} width="80%">
             <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14}>Wind</Box>
