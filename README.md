@@ -2,7 +2,7 @@
 
 ## Team Members
 
-Aldrin, Kai, Ingrid, Madhu and Ingrid
+Aldrin, Kai, Ingrid, Madhu and Wendy
 
 ## Description 
  Our app is called PocketForecast.
