@@ -5,7 +5,7 @@ import axios from 'axios';
 import Nav from '@/components/Nav';
 import Image from 'next/image';
 
-type WeatherCondition = 'Clear' | 'Cloudy' | 'Drizzle' | 'Rain' | 'Snow' | 'Thunder';
+type WeatherCondition = 'Clear' | 'Clouds' | 'Drizzle' | 'Rain' | 'Snow' | 'Thunderstorm';
 
 export default function Index(): JSX.Element {
   const [weatherData, setWeatherData] = useState({
@@ -17,20 +17,20 @@ export default function Index(): JSX.Element {
 
   const weatherIcons: Record<WeatherCondition, string> = {
     Clear: 'clear.png',
-    Cloudy: 'cloudy,png',
+    Clouds: 'cloudy.png',
     Drizzle: 'drizzle.png',
     Rain: 'rain.png',
     Snow: 'snow.png',
-    Thunder: 'thunder.png'
+    Thunderstorm: 'thunder.png'
   };
 
   const weatherBackgrounds: Record<WeatherCondition, string> = {
     Clear: 'sun-background.png',
-    Cloudy: 'cloudy-background.png',
+    Clouds: 'cloudy-background.png',
     Drizzle: 'rain-background.png',
     Rain: 'rain-background.png',
     Snow: 'snow-background.png',
-    Thunder: 'thunder-background.png'
+    Thunderstorm: 'thunder-background.png'
   };
 
   useEffect(() => {
@@ -60,7 +60,7 @@ export default function Index(): JSX.Element {
   }, []);
 
   return (
-    <Box bgImage={`url(/images/${weatherBackgrounds[weatherData.weather]})`}
+    <Box bgImage={`/images/${weatherBackgrounds[weatherData.weather]}`}
       bgSize="cover"
       bgPosition="center"
       bgRepeat="no-repeat">
