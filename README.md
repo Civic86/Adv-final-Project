@@ -12,4 +12,4 @@ With pocketforecast ,add a touch of adventure to weather awareness. Turn your ev
 
 [Pokemon API](https://pokeapi.co/)
 
-[Weather API](https://www.tomorrow.io)
+[Weather API](https://openweathermap.org)
