@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { SimpleGrid, Card, CardHeader, Heading, Image, Text, Button } from '@chakra-ui/react';
+import Nav from '@/components/Nav';
 
 interface Pokemon {
   name: string;
@@ -54,6 +55,7 @@ export default function Pokedex(): JSX.Element {
       {pokemons.length < 649 && ( 
         <Button onClick={loadNextPage}>Load Next 100 Pokémon</Button>
       )}
+      <Nav/>
     </div>
   );
 }

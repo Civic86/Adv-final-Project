@@ -1,3 +1,4 @@
+import Nav from '@/components/Nav';
 import { Box, Flex, Heading, SimpleGrid, Text } from '@chakra-ui/react';
 import Link from 'next/link';
 
@@ -21,6 +22,7 @@ export default function Pokemon(): JSX.Element {
             </SimpleGrid>
         </Flex>
       </Flex>
+      <Nav/>
     </Box>
   );
 }
