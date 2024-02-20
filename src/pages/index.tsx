@@ -5,7 +5,7 @@ import axios from 'axios';
 import Nav from '@/components/Nav';
 import Image from 'next/image';
 
-type WeatherCondition = 'Clear' | 'Cloudy' | 'Rain' | 'Snow';
+type WeatherCondition = 'Clear' | 'Cloudy' | 'Drizzle' | 'Rain' | 'Snow' | 'Thunder';
 
 export default function Index(): JSX.Element {
   const [weatherData, setWeatherData] = useState({
@@ -19,8 +19,10 @@ export default function Index(): JSX.Element {
   const weatherIcons: Record<WeatherCondition, string> = {
     Clear: 'clear.png',
     Cloudy: 'cloudy,png',
+    Drizzle: 'drizzle.png',
     Rain: 'rain.png',
     Snow: 'snow.png',
+    Thunder: 'thunder.png'
   };
 
   useEffect(() => {
