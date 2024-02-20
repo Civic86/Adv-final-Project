@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Nav from '@/components/Nav';
 import Image from 'next/image';
+import { Pokemon, Type } from 'pokeapi-typescript';
 
 type WeatherCondition = 'Clear' | 'Clouds' | 'Drizzle' | 'Rain' | 'Snow' | 'Thunderstorm' | 'Mist';
 
@@ -14,6 +15,7 @@ export default function Index(): JSX.Element {
   });
 
   const [currentDate, setCurrentDate] = useState('');
+  const [randomPokemonImageUrl, setRandomPokemonImageUrl] = useState<string | null>(null);
 
   const weatherIcons: Record<WeatherCondition, string> = {
     Clear: 'clear.png',
@@ -24,6 +26,20 @@ export default function Index(): JSX.Element {
     Thunderstorm: 'thunder.png',
     Mist: 'atmosphere.png'
   };
+
+  const fetchRandomPokemonImage = async (pokemonType: string) => {
+    try {
+      const typeData = await Type.fetch(pokemonType);
+      const pokemonOfType = typeData.pokemon.map((p) => p.pokemon);
+      const randomPokemon = pokemonOfType[Math.floor(Math.random() * pokemonOfType.length)];
+      const pokemonDetails = await Pokemon.fetch(randomPokemon.name);
+      return pokemonDetails.sprites.other['official-artwork'].front_default;
+    } catch (error) {
+      console.error('Failed to fetch random Pokémon image:', error);
+      return null;
+    }
+  };
+
 
   const weatherBackgrounds: Record<WeatherCondition, string> = {
     Clear: 'sun-background.png',
@@ -53,12 +69,42 @@ export default function Index(): JSX.Element {
       }
     };
 
+    const loadRandomPokemonImage = async () => {
+      const pokemonType = getWeatherBasedPokemonType(weatherData.weather); // Get the Pokémon type based on the current weather
+      const pokemonImageUrl = await fetchRandomPokemonImage(pokemonType);
+      if (pokemonImageUrl) {
+        // Update the UI to display the Pokémon's image
+        setRandomPokemonImageUrl(pokemonImageUrl);
+      }
+    };
+    loadRandomPokemonImage();
+
     fetchWeather();
 
     const date = new Date();
     const options = { weekday: 'long', month: 'short', day: 'numeric' } as const;
     setCurrentDate(date.toLocaleDateString('en-US', options));
   }, []);
+
+  const getWeatherBasedPokemonType = (weather: WeatherCondition): string => {
+    // Map weather conditions to Pokémon types
+    switch (weather) {
+      case 'Clear':
+        return 'normal', 'fire', 'fighting', 'flying';
+      case 'Clouds':
+        return 'fairy', 'poison', 'bug' ;
+      case 'Drizzle':
+      case 'Rain':
+        return 'water';
+      case 'Snow':
+        return 'ice';
+      case 'Thunder':
+        return 'electric';
+      default:
+        return 'normal'; // Default to normal type for unknown weather
+    }
+  };
+
 
   return (
     <Box bgImage={`/images/${weatherBackgrounds[weatherData.weather]}`}
@@ -88,7 +134,7 @@ export default function Index(): JSX.Element {
         </Flex>
         <Flex flex={1} alignItems="center" direction={'column'} justifyContent="center">
           <Link href="/pokemon">
-            <Box w={200} h={200} bg="green.100" borderRadius="50%"></Box>
+            {randomPokemonImageUrl && <img src={randomPokemonImageUrl} alt="Random Pokémon" />}
           </Link>
         </Flex>
       </Flex>
