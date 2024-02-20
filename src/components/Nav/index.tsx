@@ -5,22 +5,24 @@ import Link from 'next/link';
 
 const Nav = () => {
   return (
-    <Box bg="#5AC9A1" display="flex" alignItems="center" justifyContent="space-evenly">
+    <Box bg="#5AC9A1" display="flex" alignItems="center" justifyContent="space-evenly" width='100vw'  >
         <Link href="/">
         <Image
-        src="/images/homeIcon.png"
+        src="/images/homeIcon.svg"
         width={75}
         height={75}
         alt='homeIcon'
       />
         </Link>
       
+      <Link href="/pokedex">
       <Image
-        src="/images/bookIcon.png"
+        src="/images/bookIcon.svg"
         width={75}
         height={75}
         alt='bookIcon' 
       />
+      </Link>
     </Box>
   );
 };
