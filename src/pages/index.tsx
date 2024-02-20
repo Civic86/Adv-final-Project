@@ -5,7 +5,7 @@ import axios from 'axios';
 import Nav from '@/components/Nav';
 import { Pokemon, Type } from 'pokeapi-typescript';
 
-type WeatherCondition = 'Clear' | 'Cloudy' | 'Drizzle' | 'Rain' | 'Snow' | 'Thunder';
+type WeatherCondition = 'Clear' | 'Clouds' | 'Drizzle' | 'Rain' | 'Snow' | 'Thunderstorm' | 'Mist';
 
 export default function Index(): JSX.Element {
   const [weatherData, setWeatherData] = useState({
@@ -18,21 +18,23 @@ export default function Index(): JSX.Element {
 
   const weatherIcons: Record<WeatherCondition, string> = {
     Clear: 'clear.png',
-    Cloudy: 'cloudy,png',
+    Clouds: 'cloudy.png',
     Drizzle: 'drizzle.png',
     Rain: 'rain.png',
+    Thunderstorm: 'thunder.png',
+    Mist: 'atmosphere.png',
     Snow: 'snow.png',
-    Thunder: 'thunder.png'
   };
 
   const weatherBackgrounds: Record<WeatherCondition, string> = {
     Clear: 'sun-background.png',
-    Cloudy: 'cloudy-background.png',
+    Clouds: 'cloudy-background.png',
     Drizzle: 'rain-background.png',
     Rain: 'rain-background.png',
     Snow: 'snow-background.png',
-    Thunder: 'thunder-background.png'
-  };
+    Thunderstorm: 'thunder-background.png',
+    Mist: 'atmosphere.png'
+    };
 
   const fetchRandomPokemonImage = async (pokemonType: string) => {
     try {
@@ -101,31 +103,30 @@ export default function Index(): JSX.Element {
 
 
   return (
-    <Box bgImage={`url(/images/${weatherBackgrounds[weatherData.weather]})`}
+    <Box bgImage={`/images/${weatherBackgrounds[weatherData.weather]}`}
       bgSize="cover"
       bgPosition="center"
       bgRepeat="no-repeat">
       <Flex color='white'>
         <Flex flex={1} alignItems="center" minH="100vh" direction={'column'}>
-          <Text fontSize={40} mt={10}>Vancouver, BC</Text>
-          <Flex alignItems="center" mt={-14} gap={10}>
+          <Text fontSize={40} fontWeight={600} mt={10}>Vancouver, BC</Text>
+          <Flex alignItems="center" gap={10}>
             <Image
               width={150}
               height={200}
               src={`/images/${weatherIcons[weatherData.weather]}`}
               alt={'weather icon'}
             />
-            <Text fontSize={167}>{weatherData.temp}°C</Text>
-          </Flex>
-          <Text fontSize={40} mt={-14}>{weatherData.weather}</Text>
-          <Flex alignItems="center" gap={10}>
-            <Text fontSize={40}>{currentDate}</Text>
-          </Flex>
+            <Text fontSize={87} my={4}>{weatherData.temp}°C</Text>
+            </Flex>
+          <Text fontSize={30}>{weatherData.weather}</Text>
+          <Text fontSize={30} mt={-2} mb={6}>{currentDate}</Text>
+
           <SimpleGrid columns={2} spacing={10} width="80%">
-            <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14} borderRadius='0.5em' backgroundColor='black' opacity='50%'>Wind</Box>
-            <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14} borderRadius='0.5em' backgroundColor='black' opacity='50%'>Humidity</Box>
-            <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14} borderRadius='0.5em' backgroundColor='black' opacity='50%'>Visibility</Box>
-            <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14} borderRadius='0.5em' backgroundColor='black' opacity='50%'>Precipitation</Box>
+            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Wind</Flex>
+            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Humidity</Flex>
+            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Visibility</Flex>
+            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Precipitation</Flex>
           </SimpleGrid>
         </Flex>
         <Flex flex={1} alignItems="center" direction={'column'} justifyContent="center">
