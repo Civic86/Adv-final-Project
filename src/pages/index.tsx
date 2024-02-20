@@ -67,25 +67,23 @@ export default function Index(): JSX.Element {
       bgRepeat="no-repeat">
       <Flex color='white'>
         <Flex flex={1} alignItems="center" minH="100vh" direction={'column'}>
-          <Text fontSize={40} mt={10}>Vancouver, BC</Text>
-          <Flex alignItems="center" mt={-14} gap={10}>
+          <Text fontSize={40} fontWeight={600} mt={10}>Vancouver, BC</Text>
+          <Flex alignItems="center" gap={10}>
             <Image
               width={150}
               height={200}
               src={`/images/${weatherIcons[weatherData.weather]}`}
               alt={'weather icon'}
             />
-            <Text fontSize={167}>{weatherData.temp}°C</Text>
+            <Text fontSize={87} my={4}>{weatherData.temp}°C</Text>
           </Flex>
-          <Text fontSize={40} mt={-14}>{weatherData.weather}</Text>
-          <Flex alignItems="center" gap={10}>
-            <Text fontSize={40}>{currentDate}</Text>
-          </Flex>
+          <Text fontSize={30}>{weatherData.weather}</Text>
+          <Text fontSize={30} mt={-2} mb={6}>{currentDate}</Text>
           <SimpleGrid columns={2} spacing={10} width="80%">
-            <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14} borderRadius='0.5em' backgroundColor='black' opacity='50%'>Wind</Box>
-            <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14} borderRadius='0.5em' backgroundColor='black' opacity='50%'>Humidity</Box>
-            <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14} borderRadius='0.5em' backgroundColor='black' opacity='50%'>Visibility</Box>
-            <Box bg='rgba(128,128,128,0.5)' textAlign="center" height={14} borderRadius='0.5em' backgroundColor='black' opacity='50%'>Precipitation</Box>
+            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Wind</Flex>
+            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Humidity</Flex>
+            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Visibility</Flex>
+            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Precipitation</Flex>
           </SimpleGrid>
         </Flex>
         <Flex flex={1} alignItems="center" direction={'column'} justifyContent="center">
