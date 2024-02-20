@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 const Nav = () => {
   return (
-    <Box bg="blue.100" display="flex" alignItems="center" justifyContent="space-evenly">
+    <Box bg="#5AC9A1" display="flex" alignItems="center" justifyContent="space-evenly">
         <Link href="/">
         <Image
         src="/images/homeIcon.png"
