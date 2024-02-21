@@ -14,6 +14,13 @@ const Nav = () => {
         alt='homeIcon'
       />
         </Link>
+
+        <Image
+        src="/images/logo_poke_cloud.png"
+        width={75}
+        height={75}
+        alt=''
+        />
       
       <Link href="/pokedex">
       <Image
