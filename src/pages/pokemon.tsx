@@ -1,8 +1,9 @@
 import Nav from '@/components/Nav';
-import { Box, Flex, Text, SimpleGrid, Heading, Image } from '@chakra-ui/react';
+import { Box, Flex, Text, SimpleGrid, Heading, Image, Divider } from '@chakra-ui/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
+import BackButton from '@/components/BackButton';
 
 // Define the fetchPokemonData function to fetch Pokémon details
 const fetchPokemonData = async (name) => {
@@ -45,6 +46,7 @@ export default function Pokemon(): JSX.Element {
 
   return (
     <Box>
+      <BackButton />
       <Flex>
         <Flex flex={4} bg="blue.100" alignItems="center" justifyContent="center">
           {pokemonDetails && pokemonDetails.sprites && pokemonDetails.sprites.other && pokemonDetails.sprites.other['official-artwork'] && (
@@ -55,12 +57,30 @@ export default function Pokemon(): JSX.Element {
           {pokemonDetails && (
             <>
               <Heading as="h1" fontSize="2xl" mt={10}>{pokemonDetails.name}</Heading>
-              <SimpleGrid columns={2} spacing={4} mt={4}>
-                <Text>Species: {pokemonDetails.species.name}</Text>
-                <Text>Abilities: {pokemonDetails.abilities.map(ability => ability.ability.name).join(', ')}</Text>
-                <Text>Height: {convertToCentimeters(pokemonDetails.height)} cm</Text>
-                <Text>Weight: {convertToKilograms(pokemonDetails.weight)} kg</Text>
+              <Text>Type?</Text>
+              <SimpleGrid alignItems={'center'} textAlign='center' columns={2} spacing={4} mt={4}>
+                <Box rounded='lg' boxShadow='lg' py='6'>
+                  <Text color={'#A0A0A0'}>Species</Text>
+                  <Text color={'#3AC291'}>{pokemonDetails.species.name}</Text>
+                </Box>
+                <Box rounded='lg' boxShadow='lg' py='6'>
+                  <Text color={'#A0A0A0'}>Abilities</Text>
+                  <Text color={'#3AC291'}>{pokemonDetails.abilities.map(ability => ability.ability.name).join(', ')}</Text>
+                </Box>
+                <Box rounded='lg' boxShadow='lg' py='6'>
+                  <Text color={'#A0A0A0'}>Height</Text>
+                  <Text color={'#3AC291'}>{convertToCentimeters(pokemonDetails.height)} cm</Text>
+                </Box>
+                <Box rounded='lg' boxShadow='lg' py='6'>
+                  <Text color={'#A0A0A0'}>Weight</Text>
+                  <Text color={'#3AC291'}>{convertToKilograms(pokemonDetails.weight)} kg</Text>
+                </Box>
               </SimpleGrid>
+             
+              <Divider my={4} w='55%' h='20px'/>
+              <Text>bla</Text>
+              <Divider my={4} w='55%' />
+            
             </>
           )}
         </Flex>
