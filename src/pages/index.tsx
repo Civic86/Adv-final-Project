@@ -1,6 +1,6 @@
 import { Box, Flex, Text, SimpleGrid, Image} from '@chakra-ui/react';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import Nav from '@/components/Nav';
 import { Pokemon, Type } from 'pokeapi-typescript';
@@ -62,26 +62,25 @@ export default function Index(): JSX.Element {
       default:
         pokemonType = 'normal';
     }
-    console.log(weather, 'Pokémon Type:', pokemonType); // Add this line
+    console.log(weather, 'Pokémon Type:', pokemonType);
     return pokemonType;
   };
 
-  const fetchRandomPokemonImage = async (pokemonType: string) => {
+  const fetchRandomPokemonImage = useCallback(async (pokemonType) => {
     try {
       const typeData = await Type.fetch(pokemonType);
-      console.log('Type Data:', typeData);
       const pokemonOfType = typeData.pokemon.map((p) => p.pokemon);
       const randomPokemon = pokemonOfType[Math.floor(Math.random() * pokemonOfType.length)];
       const pokemonDetails = await Pokemon.fetch(randomPokemon.name);
-      console.log('Random Pokémon Details:', pokemonDetails);
+      console.log('Final Pokémon Details:', pokemonDetails); // Log here
+      console.log('Front default sprite:', pokemonDetails.sprites.other['official-artwork'].front_default); // Additional log
       return pokemonDetails.sprites.other['official-artwork'].front_default;
     } catch (error) {
       console.error('Failed to fetch random Pokémon image:', error);
       return null;
     }
-  };
-
-
+  }, []);
+  
   const loadRandomPokemonImage = async (weather: WeatherCondition) => {
     const pokemonType = getWeatherBasedPokemonType(weather);
     const pokemonImageUrl = await fetchRandomPokemonImage(pokemonType);
@@ -122,8 +121,7 @@ export default function Index(): JSX.Element {
     if (weatherData.weather !== '' && !randomPokemonImageUrl) { 
       loadRandomPokemonImage(weatherData.weather);
     }
-  }, [weatherData, randomPokemonImageUrl]);
-
+  }, [weatherData.weather, randomPokemonImageUrl]);
 
   return (
     <Box bgImage={`/images/${weatherBackgrounds[weatherData.weather]}`}
