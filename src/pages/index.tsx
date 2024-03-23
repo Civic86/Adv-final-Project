@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import Nav from '@/components/Nav';
 import { Pokemon, Type } from 'pokeapi-typescript';
+import { useRouter } from 'next/router';
 
 type WeatherCondition = 'Clear' | 'Clouds' | 'Drizzle' | 'Rain' | 'Snow' | 'Thunderstorm' | 'Mist';
 
@@ -16,6 +17,7 @@ export default function Index(): JSX.Element {
   const [currentDate, setCurrentDate] = useState('');
   const [randomPokemonImageUrl, setRandomPokemonImageUrl] = useState<string | null>(null);
   const [pokemonImageLoaded, setPokemonImageLoaded] = useState(false);
+  const [pokemonDetails, setPokemonDetails] = useState<any>(null);
 
   const weatherIcons: Record<WeatherCondition, string> = {
     Clear: 'clear.png',
@@ -74,6 +76,7 @@ export default function Index(): JSX.Element {
       const pokemonDetails = await Pokemon.fetch(randomPokemon.name);
       console.log('Final Pokémon Details:', pokemonDetails); // Log here
       console.log('Front default sprite:', pokemonDetails.sprites.other['official-artwork'].front_default); // Additional log
+      setPokemonDetails(pokemonDetails); // Update pokemonDetails state
       return pokemonDetails.sprites.other['official-artwork'].front_default;
     } catch (error) {
       console.error('Failed to fetch random Pokémon image:', error);
@@ -150,9 +153,12 @@ export default function Index(): JSX.Element {
           </SimpleGrid>
         </Flex>
         <Flex flex={1} alignItems="center" direction={'column'} justifyContent="center">
-          <Link href="/pokemon" >
-            {randomPokemonImageUrl && <img src={randomPokemonImageUrl} alt="Random Pokémon"/>}
-          </Link>
+          {/* Conditionally render Link component based on pokemonDetails */}
+          {pokemonDetails && (
+            <Link href={`/pokemon?name=${pokemonDetails.name}&type=${pokemonDetails.type}`}>
+              <Image src={randomPokemonImageUrl} alt="Random Pokémon"/>
+            </Link>
+          )}
         </Flex>
       </Flex>
       <Nav />
