@@ -45,7 +45,11 @@ export default function Index(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    if (weatherData.weather !== 'Clear' && !randomPokemonImageUrl) {
+    // console.log("Weather:", weatherData.weather);
+    // console.log("Random Pokemon Image URL:", randomPokemonImageUrl);
+    //the commented out code can be used to help check if the weather type and the pokemon type are being fetched correctly
+  
+    if (weatherData.weather !== '' && !randomPokemonImageUrl) {
       loadRandomPokemonImage(weatherData.weather);
     }
   }, [weatherData.weather, randomPokemonImageUrl]);
@@ -56,9 +60,9 @@ export default function Index(): JSX.Element {
       const pokemonOfType = typeData.pokemon.map((p: { pokemon: string }) => p.pokemon);
       const randomPokemon = pokemonOfType[Math.floor(Math.random() * pokemonOfType.length)];
       const pokemonDetails = await Pokemon.fetch(randomPokemon.name);
-      console.log('Final Pokémon Details:', pokemonDetails); // Log here
-      console.log('Front default sprite:', pokemonDetails.sprites.other['official-artwork'].front_default); // Additional log
-      setPokemonDetails(pokemonDetails); // Update pokemonDetails state
+      console.log('Final Pokémon Details:', pokemonDetails);
+      console.log('Front default sprite:', pokemonDetails.sprites.other['official-artwork'].front_default);
+      setPokemonDetails(pokemonDetails);
       return pokemonDetails.sprites.other['official-artwork'].front_default;
     } catch (error) {
       console.error('Failed to fetch random Pokémon image:', error);

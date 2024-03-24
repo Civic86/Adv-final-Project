@@ -40,7 +40,7 @@ export const getWeatherBasedPokemonType = (weather: WeatherCondition): string =>
       pokemonType = 'electric';
       break;
     case 'Mist':
-      pokemonType = 'fairy';
+      pokemonType = 'ghost';
       break;
     default:
       pokemonType = 'normal';
