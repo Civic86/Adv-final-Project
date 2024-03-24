@@ -1,8 +1,11 @@
+import axios from 'axios';
 import Nav from '@/components/Nav';
 import { Box, Flex, Text, SimpleGrid, Heading, Image, Divider, Button, Link } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import BackButton from '@/components/BackButton';
+import { weatherBackgrounds } from '../../data/information';
+import { WeatherCondition, WeatherData } from '../../typing'
 
 // Define the fetchPokemonData function to fetch Pokémon details
 const fetchPokemonData = async (name) => {
@@ -17,16 +20,41 @@ const fetchPokemonData = async (name) => {
 
 export default function Pokemon(): JSX.Element {
 
-  type WeatherCondition = 'Clear' | 'Clouds' | 'Drizzle' | 'Rain' | 'Snow' | 'Thunderstorm' | 'Mist';
-
-  const [weatherData, setWeatherData] = useState({
+  const [weatherData, setWeatherData] = useState<WeatherData>({
     temp: '',
     weather: '' as WeatherCondition,
   });
 
+  const [currentDate, setCurrentDate] = useState<string>('');
   const router = useRouter();
   const { name } = router.query;
   const [pokemonDetails, setPokemonDetails] = useState(null);
+
+  useEffect(() => {
+    const fetchWeather = async () => {
+      try {
+        const apiKey = '94cc376cb7e1d14d4733642775cf5059';
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=Vancouver,ca&units=metric&appid=${apiKey}`;
+        const response = await axios.get(url);
+        const { temp } = response.data.main;
+        const { main } = response.data.weather[0];
+
+        setWeatherData({
+          temp: Math.round(temp).toString(),
+          weather: main as WeatherCondition,
+        });
+      } catch (error) {
+        console.error('Failed to fetch weather data:', error);
+      }
+    };
+
+    fetchWeather();
+
+    const date = new Date();
+    const options = { weekday: 'long', month: 'short', day: 'numeric' } as const;
+    setCurrentDate(date.toLocaleDateString('en-US', options));
+
+  }, []);
 
   useEffect(() => {
     const fetchPokemonDetails = async () => {
@@ -55,7 +83,15 @@ export default function Pokemon(): JSX.Element {
     <Box>
       <BackButton />
       <Flex>
-        <Flex flex={4} bg="blue.100" alignItems="center" justifyContent="center">
+      <Flex
+        bgImage={`/images/${weatherBackgrounds[weatherData.weather]}`}
+        bgSize="cover"
+        bgPosition="center"
+        bgRepeat="no-repeat"
+        flex={4}
+        alignItems="center"
+        justifyContent="center"
+      >
           {pokemonDetails && pokemonDetails.sprites && pokemonDetails.sprites.other && pokemonDetails.sprites.other['official-artwork'] && (
             <Image src={pokemonDetails.sprites.other['official-artwork'].front_default} alt="Official Artwork" boxSize="200px" mt={4} />
           )}

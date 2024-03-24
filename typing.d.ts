@@ -1,5 +1,3 @@
-// typings.d.ts
-
 export interface WeatherData {
     temp: string;
     weather: WeatherCondition;
