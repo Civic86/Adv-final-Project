@@ -1,77 +1,59 @@
-import { Box, Flex, Text, SimpleGrid, Image} from '@chakra-ui/react';
-import Link from 'next/link';
 import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import Nav from '@/components/Nav';
 import { Pokemon, Type } from 'pokeapi-typescript';
 import { useRouter } from 'next/router';
-
-type WeatherCondition = 'Clear' | 'Clouds' | 'Drizzle' | 'Rain' | 'Snow' | 'Thunderstorm' | 'Mist';
+import { WeatherCondition, WeatherData } from '../../typing';
+import { weatherIcons, weatherBackgrounds, getWeatherBasedPokemonType } from '../../data/information';
+import { Box, Flex, Text, SimpleGrid, Image } from '@chakra-ui/react';
+import Link from 'next/link';
 
 export default function Index(): JSX.Element {
-  const [weatherData, setWeatherData] = useState({
+  const [weatherData, setWeatherData] = useState<WeatherData>({
     temp: '',
     weather: '' as WeatherCondition,
   });
 
-  const [currentDate, setCurrentDate] = useState('');
+  const [currentDate, setCurrentDate] = useState<string>('');
   const [randomPokemonImageUrl, setRandomPokemonImageUrl] = useState<string | null>(null);
-  const [pokemonImageLoaded, setPokemonImageLoaded] = useState(false);
   const [pokemonDetails, setPokemonDetails] = useState<any>(null);
 
-  const weatherIcons: Record<WeatherCondition, string> = {
-    Clear: 'clear.png',
-    Clouds: 'cloudy.png',
-    Drizzle: 'drizzle.png',
-    Rain: 'rain.png',
-    Thunderstorm: 'thunder.png',
-    Mist: 'atmosphere.png',
-    Snow: 'snow.png',
-  };
+  useEffect(() => {
+    const fetchWeather = async () => {
+      try {
+        const apiKey = '94cc376cb7e1d14d4733642775cf5059';
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=Vancouver,ca&units=metric&appid=${apiKey}`;
+        const response = await axios.get(url);
+        const { temp } = response.data.main;
+        const { main } = response.data.weather[0];
 
-  const weatherBackgrounds: Record<WeatherCondition, string> = {
-    Clear: 'sun-background.png',
-    Clouds: 'cloudy-background.png',
-    Drizzle: 'rain-background.png',
-    Rain: 'rain-background.png',
-    Snow: 'snow-background.png',
-    Thunderstorm: 'thunder-background.png',
-    Mist: 'atmosphere.png'
-  };
+        setWeatherData({
+          temp: Math.round(temp).toString(),
+          weather: main as WeatherCondition,
+        });
+      } catch (error) {
+        console.error('Failed to fetch weather data:', error);
+      }
+    };
 
-  const getWeatherBasedPokemonType = (weather: WeatherCondition): string => {
-    let pokemonType: string;
-    switch (weather) {
-      case 'Clear':
-        pokemonType = 'normal';
-        break;
-      case 'Clouds':
-        pokemonType = 'fairy';
-        break;
-      case 'Drizzle':
-      case 'Rain':
-        pokemonType = 'water';
-        break;
-      case 'Snow':
-        pokemonType = 'ice';
-        break;
-      case 'Thunderstorm':
-        pokemonType = 'electric';
-        break;
-      case 'Mist':
-        pokemonType = 'fairy';
-        break;
-      default:
-        pokemonType = 'normal';
+    fetchWeather();
+
+    const date = new Date();
+    const options = { weekday: 'long', month: 'short', day: 'numeric' } as const;
+    setCurrentDate(date.toLocaleDateString('en-US', options));
+
+  }, []);
+
+  useEffect(() => {
+    if (weatherData.weather !== 'Clear' && !randomPokemonImageUrl) {
+      loadRandomPokemonImage(weatherData.weather);
     }
-    console.log(weather, 'Pokémon Type:', pokemonType);
-    return pokemonType;
-  };
+  }, [weatherData.weather, randomPokemonImageUrl]);
 
-  const fetchRandomPokemonImage = useCallback(async (pokemonType) => {
+  const fetchRandomPokemonImage = useCallback(async (pokemonType: string) => {
     try {
       const typeData = await Type.fetch(pokemonType);
-      const pokemonOfType = typeData.pokemon.map((p) => p.pokemon);
+      const pokemonOfType = typeData.pokemon.map((p: { pokemon: string }) => p.pokemon);
       const randomPokemon = pokemonOfType[Math.floor(Math.random() * pokemonOfType.length)];
       const pokemonDetails = await Pokemon.fetch(randomPokemon.name);
       console.log('Final Pokémon Details:', pokemonDetails); // Log here
@@ -83,48 +65,14 @@ export default function Index(): JSX.Element {
       return null;
     }
   }, []);
-  
+
   const loadRandomPokemonImage = async (weather: WeatherCondition) => {
     const pokemonType = getWeatherBasedPokemonType(weather);
     const pokemonImageUrl = await fetchRandomPokemonImage(pokemonType);
     if (pokemonImageUrl) {
       setRandomPokemonImageUrl(pokemonImageUrl);
-      setPokemonImageLoaded(true); 
     }
   };
-
-  useEffect(() => {
-    const fetchWeather = async () => {
-      try {
-        const apiKey = '94cc376cb7e1d14d4733642775cf5059';
-        const url = `https://api.openweathermap.org/data/2.5/weather?q=Vancouver,ca&units=metric&appid=${apiKey}`;
-        const response = await axios.get(url);
-        const { temp } = response.data.main;
-        const { main } = response.data.weather[0];
-  
-        setWeatherData({
-          temp: Math.round(temp).toString(),
-          weather: main as WeatherCondition,
-        });
-      } catch (error) {
-        console.error('Failed to fetch weather data:', error);
-      }
-    };
-  
-    fetchWeather();
-  
-    const date = new Date();
-    const options = { weekday: 'long', month: 'short', day: 'numeric' } as const;
-    setCurrentDate(date.toLocaleDateString('en-US', options));
-  
-  }, []);
-  
-  
-  useEffect(() => {
-    if (weatherData.weather !== '' && !randomPokemonImageUrl) { 
-      loadRandomPokemonImage(weatherData.weather);
-    }
-  }, [weatherData.weather, randomPokemonImageUrl]);
 
   return (
     <Box bgImage={`/images/${weatherBackgrounds[weatherData.weather]}`}
@@ -144,9 +92,9 @@ export default function Index(): JSX.Element {
           </Flex>
           <Text fontSize={30}>{weatherData.weather}</Text>
           <Text fontSize={30} mt={-2} mb={6}>{currentDate}</Text>
-  
+
           <SimpleGrid columns={2} spacing={10} width="80%">
-            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center' style={{color: "white"}}>Wind</Flex>
+            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center' style={{ color: "white" }}>Wind</Flex>
             <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Humidity</Flex>
             <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Visibility</Flex>
             <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Precipitation</Flex>
@@ -156,7 +104,9 @@ export default function Index(): JSX.Element {
           {/* Conditionally render Link component based on pokemonDetails */}
           {pokemonDetails && (
             <Link href={`/pokemon?name=${pokemonDetails.name}&type=${pokemonDetails.type}`}>
-              <Image src={randomPokemonImageUrl} alt="Random Pokémon"/>
+              {randomPokemonImageUrl && (
+                <Image src={randomPokemonImageUrl} alt="Random Pokémon" />
+              )}
             </Link>
           )}
         </Flex>
@@ -164,4 +114,4 @@ export default function Index(): JSX.Element {
       <Nav />
     </Box>
   );
-};
+}
