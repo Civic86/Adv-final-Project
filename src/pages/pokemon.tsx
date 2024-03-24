@@ -16,6 +16,14 @@ const fetchPokemonData = async (name) => {
 };
 
 export default function Pokemon(): JSX.Element {
+
+  type WeatherCondition = 'Clear' | 'Clouds' | 'Drizzle' | 'Rain' | 'Snow' | 'Thunderstorm' | 'Mist';
+
+  const [weatherData, setWeatherData] = useState({
+    temp: '',
+    weather: '' as WeatherCondition,
+  });
+
   const router = useRouter();
   const { name } = router.query;
   const [pokemonDetails, setPokemonDetails] = useState(null);
@@ -56,7 +64,7 @@ export default function Pokemon(): JSX.Element {
           {pokemonDetails && (
             <>
               <Heading as="h1" fontSize="2xl" mt={10} style={{ textTransform: 'capitalize' }}>{pokemonDetails.name}</Heading>
-              <Button my='2' bg='#8BC5CD' color='white' size='xs' fontWeight='normal'>Type?</Button>
+              <Text my='2' rounded='md' bg='#8BC5CD' color='white' size='xs' fontWeight='normal' p='1'>Type?</Text>
               <SimpleGrid alignItems={'center'} textAlign='center' columns={2} spacing={4} mt={4}>
                 <Box rounded='lg' boxShadow='lg' py='6'>
                   <Text color={'#A0A0A0'}>Species</Text>
