@@ -14,6 +14,10 @@ export default function BackButton() {
       leftIcon={<ChevronLeftIcon />}
       onClick={handleBack}
       variant="outline"
+      position={'absolute'}
+      bg={'#fff'}
+      mt={5}
+      ml={5}
     >
       Back
     </Button>
