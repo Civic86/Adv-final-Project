@@ -146,7 +146,7 @@ export default function Index(): JSX.Element {
           <Text fontSize={30} mt={-2} mb={6}>{currentDate}</Text>
   
           <SimpleGrid columns={2} spacing={10} width="80%">
-            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Wind</Flex>
+            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center' style={{color: "white"}}>Wind</Flex>
             <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Humidity</Flex>
             <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Visibility</Flex>
             <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Precipitation</Flex>
