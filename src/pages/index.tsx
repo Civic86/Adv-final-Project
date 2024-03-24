@@ -105,7 +105,7 @@ export default function Index(): JSX.Element {
           </SimpleGrid>
         </Flex>
         <Flex flex={1} alignItems="center" direction={'column'} justifyContent="center">
-          {/* Conditionally render Link component based on pokemonDetails */}
+          
           {pokemonDetails && (
             <Link href={`/pokemon?name=${pokemonDetails.name}&type=${pokemonDetails.type}`}>
               {randomPokemonImageUrl && (

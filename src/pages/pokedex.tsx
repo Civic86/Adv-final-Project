@@ -76,7 +76,7 @@ export default function Pokedex(): JSX.Element {
             <Heading size='md'>{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</Heading>
             <Text fontWeight="bold" color="gray" fontSize={20}>#{pokemon.id}</Text>
             </CardHeader>
-            <Image src={pokemon.imageUrl} alt={pokemon.name} boxSize="150px" objectFit="none" transform="scale(1.7)" position="absolute" bottom="1" right="0"/>
+            <Image src={pokemon.imageUrl} alt={pokemon.name} boxSize="150px" objectFit="none" transform="scale(1.9)" position="absolute" bottom="-1" right="-2"/>
           </Card>
         ))}
       </SimpleGrid>
