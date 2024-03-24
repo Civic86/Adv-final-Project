@@ -4,7 +4,6 @@ import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import BackButton from '@/components/BackButton';
 
-// Define the fetchPokemonData function to fetch Pokémon details
 const fetchPokemonData = async (name) => {
   try {
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);

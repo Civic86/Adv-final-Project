@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { SimpleGrid, Card, CardHeader, Heading, Image, Text, Button, Input, InputGroup, InputLeftElement, Stack } from '@chakra-ui/react';
+import { SimpleGrid, Card, CardHeader, Heading, Image, Text, Button, Input, InputGroup, InputLeftElement, Stack, Box } from '@chakra-ui/react';
 import Nav from '@/components/Nav';
 
 
@@ -9,18 +9,31 @@ interface Pokemon {
   imageUrl: string;
 }
 
+const pokemonCache = {};
+
 export default function Pokedex(): JSX.Element {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
   const [offset, setOffset] = useState(0);
   const limit = 100;
   
-
   useEffect(() => {
     const fetchPokemons = async () => {
+      if (offset > 649) {
+        return; // Stop fetching if offset exceeds 649
+      }
+
+      if (pokemonCache[offset]) {
+        setPokemons(pokemonCache[offset]);
+        return;
+      }
+
       const allPokemonData: any[] = [];
       let response = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`);
       let data = await response.json();
       for (const pokemon of data.results) {
+        if (offset + allPokemonData.length + 1 > 649) {
+          break; // Stop generating if Pokémon ID exceeds 649
+        }
         response = await fetch(pokemon.url);
         const pokemonData = await response.json();
         allPokemonData.push({
@@ -29,6 +42,8 @@ export default function Pokedex(): JSX.Element {
           imageUrl: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${pokemonData.id}.gif`
         });
       }
+
+      pokemonCache[offset] = allPokemonData;
       setPokemons(allPokemonData);
     };
 
@@ -36,7 +51,13 @@ export default function Pokedex(): JSX.Element {
   }, [offset]);
 
   const loadNextPage = () => {
-    setOffset(prevOffset => prevOffset + limit); // Increment by the limit
+    setOffset(prevOffset => prevOffset + limit);
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  };
+
+  const loadPreviousPage = () => {
+    const newOffset = Math.max(0, offset - limit);
+    setOffset(newOffset);
     window.scrollTo({ top: 0, behavior: 'auto' });
   };
 
@@ -59,8 +80,17 @@ export default function Pokedex(): JSX.Element {
           </Card>
         ))}
       </SimpleGrid>
-      {pokemons.length < 649 && ( 
-        <Button mb={125} ml={50} mt={16} onClick={loadNextPage}>Load Next 100 Pokémon</Button>      )}
+      <Box display="flex" justifyContent="center">
+        {offset > 0 && (
+            <Button mb={125} ml={50} mt={16} onClick={loadPreviousPage}>Load Previous 100 Pokémon</Button>
+        )}
+
+        {pokemons.length < 649 && ( 
+          <Button mb={125} ml={50} mt={16} onClick={loadNextPage}>Load Next 100 Pokémon</Button>
+        )}
+      </Box>
+
+        
       <Nav/>
     </div>
   );
