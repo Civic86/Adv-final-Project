@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { Box, Flex, Text, SimpleGrid, Heading, Image, Button, Link } from '@chakra-ui/react';
 import BackButton from '@/components/BackButton';
 import { weatherBackgrounds } from '../../data/information';
+import { typeColors } from '../../data/information'; // Assuming typeColors are defined here
 import { WeatherCondition } from '../../typing';
 import Nav from '@/components/Nav';
 
@@ -37,7 +38,6 @@ const fetchPokemonType = async (id: string) => {
     return [];
   }
 };
-
 
 export default function PokemonDetails(): JSX.Element {
   const [weatherData, setWeatherData] = useState({
@@ -80,7 +80,6 @@ export default function PokemonDetails(): JSX.Element {
         if (pokedex && pokedex.flavor_text_entries && pokedex.flavor_text_entries.length > 0) {
           const description = pokedex.flavor_text_entries.find(entry => entry.language.name === 'en');
           if (description) {
-            // Replace the up arrow character with a space character
             const cleanDescription = description.flavor_text.replace(/\/g, ' ');
             setPokedexDescription(cleanDescription);
           }
@@ -131,7 +130,53 @@ export default function PokemonDetails(): JSX.Element {
           {pokemonDetails && (
             <>
               <Heading as="h1" fontSize={['2xl', '5xl']} mt={['10', '10', '10', '0']} style={{ textTransform: 'capitalize' }}>{pokemonDetails.name}</Heading>
-              <Text my='2' rounded='lg' bg='#8BC5CD' color='white' fontSize={['xs', 'lg']} fontWeight='normal' p='1' px='6'>{pokemonDetails.type}</Text>
+              
+              <Flex
+                flex="1"
+                height="fit-content"
+                overflow="hidden"
+                flexDirection="row"
+                alignItems="center"
+                justifyContent="center"
+                
+              >
+                {pokemonTypes.length === 1 ? (
+                  <Text
+                    my='2'
+                    rounded='lg'
+                    bg={typeColors[pokemonTypes[0]]} // Set background color dynamically based on Pokémon type
+                    color='white'
+                    fontSize={['xs', 'lg']}
+                    fontWeight='normal'
+                    p='1'
+                    px='6'
+                    width='fit-content'
+                    style={{ textTransform: 'capitalize' }}
+                  >
+                    {pokemonTypes[0]}
+                  </Text>
+                ) : (
+                  pokemonTypes.map((type, index) => (
+                    <Text
+                      key={index}
+                      my='2'
+                      rounded='lg'
+                      bg={typeColors[type]} // Set background color dynamically based on Pokémon type
+                      color='white'
+                      fontSize={['xs', 'lg']}
+                      fontWeight='normal'
+                      p='1'
+                      px='6'
+                      width='fit-content'
+                      marginRight={index !== pokemonTypes.length - 1 ? '10px' : '0'}
+                      style={{ textTransform: 'capitalize' }}
+                    >
+                      {type}
+                    </Text>
+                  ))
+                )}
+              </Flex>
+
               <SimpleGrid alignItems={'center'} textAlign='center' columns={[2]} spacing={4} mt={10}>
                 <Box rounded='lg' boxShadow='lg' p='6'>
                   <Text fontSize={['md', '2xl']} color={'#A0A0A0'}>Species</Text>

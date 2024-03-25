@@ -6,6 +6,7 @@ import { useState, useEffect } from 'react';
 import BackButton from '@/components/BackButton';
 import { weatherBackgrounds } from '../../data/information';
 import { WeatherCondition, WeatherData } from '../../typing';
+import { typeColors } from '../../data/information';
 
 const fetchPokemonData = async (name) => {
   try {
@@ -32,7 +33,8 @@ const fetchPokemonType = async (name) => {
   try {
     const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
     const data = await response.json();
-    return data.types.map(type => type.type.name);
+    const types = data.types.map(type => type.type.name);
+    return types;
   } catch (error) {
     console.error('Failed to fetch Pokémon type:', error);
     return [];
@@ -94,7 +96,7 @@ export default function Pokemon(): JSX.Element {
       try {
         // Fetch Pokémon details
         await fetchPokemonDetails();
-
+    
         // Fetch Pokédex description
         const pokedexData = await fetchPokedexDescription(name);
         if (pokedexData && pokedexData.flavor_text_entries && pokedexData.flavor_text_entries.length > 0) {
@@ -102,20 +104,20 @@ export default function Pokemon(): JSX.Element {
           if (description) {
             // Replace the up arrow character with a space character
             const cleanDescription = description.flavor_text.replace(/\/g, ' ');
-            
+    
             // Split the description into sentences
             const sentences = cleanDescription.split('. ');
-            
+    
             // Capitalize the first letter of each sentence
             const capitalizedSentences = sentences.map(sentence => sentence.charAt(0).toUpperCase() + sentence.slice(1));
-            
+    
             // Join the sentences back together
             const formattedDescription = capitalizedSentences.join('. ');
-            
+    
             setPokedexDescription(formattedDescription);
           }
         }
-
+    
         // Fetch Pokémon type
         const types = await fetchPokemonType(name);
         setPokemonTypes(types);
@@ -167,7 +169,53 @@ export default function Pokemon(): JSX.Element {
       {pokemonDetails && (
         <>
           <Heading as="h1" fontSize={['2xl', '5xl']} mt={['10', '10', '10', '0']} style={{ textTransform: 'capitalize' }}>{pokemonDetails.name}</Heading>
-          <Text my='2' rounded='lg' bg='#8BC5CD' color='white' fontSize={['xs', 'lg']} fontWeight='normal' p='1' px='6'>{pokemonDetails.type}</Text>
+          
+          <Flex
+            flex="1"
+            height="fit-content"
+            overflow="hidden"
+            flexDirection="row"
+            alignItems="center"
+            justifyContent="center"
+            
+          >
+            {pokemonTypes.length === 1 ? (
+              <Text
+                my='2'
+                rounded='lg'
+                bg={typeColors[pokemonTypes[0]]} // Set background color dynamically based on Pokémon type
+                color='white'
+                fontSize={['xs', 'lg']}
+                fontWeight='normal'
+                p='1'
+                px='6'
+                width='fit-content'
+                style={{ textTransform: 'capitalize' }}
+              >
+                {pokemonTypes[0]}
+              </Text>
+            ) : (
+              pokemonTypes.map((type, index) => (
+                <Text
+                  key={index}
+                  my='2'
+                  rounded='lg'
+                  bg={typeColors[type]} // Set background color dynamically based on Pokémon type
+                  color='white'
+                  fontSize={['xs', 'lg']}
+                  fontWeight='normal'
+                  p='1'
+                  px='6'
+                  width='fit-content'
+                  marginRight={index !== pokemonTypes.length - 1 ? '10px' : '0'}
+                  style={{ textTransform: 'capitalize' }}
+                >
+                  {type}
+                </Text>
+              ))
+            )}
+          </Flex>
+        
           <SimpleGrid alignItems={'center'} textAlign='center' columns={[2]} spacing={4} mt={10}>
             <Box rounded='lg' boxShadow='lg' p='6'>
               <Text fontSize={['md', '2xl']} color={'#A0A0A0'}>Species</Text>
