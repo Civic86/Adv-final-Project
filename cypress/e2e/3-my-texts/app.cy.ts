@@ -6,6 +6,6 @@ describe('index page', ()=>{
         cy.get('p').should('include.text', 'Vancouver, BC')
     })
    
-  
+   
 
 })
