@@ -16,7 +16,7 @@ const Nav = () => {
         </Link>
 
         <Image
-        src="/images/logo_poke_cloud.png"
+        src="/images/logo.svg"
         width={75}
         height={75}
         alt=''
