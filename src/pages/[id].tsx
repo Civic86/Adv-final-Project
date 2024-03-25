@@ -80,7 +80,9 @@ export default function PokemonDetails(): JSX.Element {
         if (pokedex && pokedex.flavor_text_entries && pokedex.flavor_text_entries.length > 0) {
           const description = pokedex.flavor_text_entries.find(entry => entry.language.name === 'en');
           if (description) {
-            setPokedexDescription(description.flavor_text);
+            // Replace the up arrow character with a space character
+            const cleanDescription = description.flavor_text.replace(/\/g, ' ');
+            setPokedexDescription(cleanDescription);
           }
         }
         if (pokemon && pokemon.types && pokemon.types.length > 0) {
@@ -91,7 +93,6 @@ export default function PokemonDetails(): JSX.Element {
         console.error('Failed to fetch Pokémon details:', error);
       }
     };
-
     if (id) {
       fetchData();
     }
@@ -154,7 +155,7 @@ export default function PokemonDetails(): JSX.Element {
                 </Box>
               </SimpleGrid>
 
-              <Text fontSize={['md', '2xl']} my='20' style={{ textTransform: 'capitalize' }}>{pokedexDescription}</Text>
+              <Text fontSize={['md', '2xl']} my='20'>{pokedexDescription}</Text>
 
               <Button bg='#8BC5CD' color='white' size='lg' rounded='xl' fontSize={['xl', '2xl']}  p='8' fontWeight='normal'><Link href='/pokedex'>Explore More Pokemon</Link></Button>
             </>

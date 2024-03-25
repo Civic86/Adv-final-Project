@@ -100,15 +100,18 @@ export default function Pokemon(): JSX.Element {
         if (pokedexData && pokedexData.flavor_text_entries && pokedexData.flavor_text_entries.length > 0) {
           const description = pokedexData.flavor_text_entries.find(entry => entry.language.name === 'en');
           if (description) {
+            // Replace the up arrow character with a space character
+            const cleanDescription = description.flavor_text.replace(/\/g, ' ');
+            
             // Split the description into sentences
-            const sentences = description.flavor_text.split('. ');
-        
+            const sentences = cleanDescription.split('. ');
+            
             // Capitalize the first letter of each sentence
             const capitalizedSentences = sentences.map(sentence => sentence.charAt(0).toUpperCase() + sentence.slice(1));
-        
+            
             // Join the sentences back together
             const formattedDescription = capitalizedSentences.join('. ');
-        
+            
             setPokedexDescription(formattedDescription);
           }
         }
@@ -188,7 +191,7 @@ export default function Pokemon(): JSX.Element {
             </Box>
           </SimpleGrid>
 
-          <Text fontSize={['md', '2xl']} my='20' style={{ textTransform: 'capitalize' }}>{pokedexDescription}</Text>
+          <Text fontSize={['md', '2xl']} my='20'>{pokedexDescription}</Text>
 
           <Button bg='#8BC5CD' color='white' size='lg' rounded='xl' fontSize={['xl', '2xl']}  p='8' fontWeight='normal'><Link href='/pokedex'>Explore More Pokemon</Link></Button>
         </>
