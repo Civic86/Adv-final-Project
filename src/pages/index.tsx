@@ -2,7 +2,6 @@ import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import Nav from '@/components/Nav';
 import { Pokemon, Type } from 'pokeapi-typescript';
-import { useRouter } from 'next/router';
 import { WeatherCondition, WeatherData } from '../../typing';
 import { weatherIcons, weatherBackgrounds, getWeatherBasedPokemonType } from '../../data/information';
 import { Box, Flex, Text, SimpleGrid, Image } from '@chakra-ui/react';

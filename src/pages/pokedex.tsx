@@ -61,7 +61,7 @@ export default function Pokedex(): JSX.Element {
     window.scrollTo({ top: 0, behavior: 'auto' });
   };
 
-  // Adjust the number of columns based on screen size
+  // Adjust number of columns based on screen size
   const gridColumnCount = useBreakpointValue({ base: 1, sm: 2, md: 3, lg: 4, xl: 5 });
 
   return (
@@ -87,7 +87,8 @@ export default function Pokedex(): JSX.Element {
           </Card>
         ))}
       </SimpleGrid>
-      <Box display="flex" justifyContent="center">
+      {/* Load Pokemon button */}
+      <Box display="flex" justifyContent="center" mt='16'>
         {offset > 0 && (
           <Button mb={125} ml={50} mt={16} onClick={loadPreviousPage}>Load Previous 100 Pokémon</Button>
         )}

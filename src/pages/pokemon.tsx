@@ -1,6 +1,6 @@
 import axios from 'axios';
 import Nav from '@/components/Nav';
-import { Box, Flex, Text, SimpleGrid, Heading, Image, Divider, Button, Link } from '@chakra-ui/react';
+import { Box, Flex, Text, SimpleGrid, Heading, Image, Button, Link } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import BackButton from '@/components/BackButton';
@@ -96,7 +96,7 @@ export default function Pokemon(): JSX.Element {
     <Image
       src={pokemonDetails.sprites.other['official-artwork'].front_default}
       alt="Official Artwork"
-      mt={[0, 4, 4]} // Adjust margin-top for different screen sizes
+      mt={[0, 4, 4]}
       width={['100%', '50%', '40%']} // Set width for different screen sizes
     />
   )}
