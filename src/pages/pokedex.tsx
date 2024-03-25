@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import { SimpleGrid, Card, CardHeader, Heading, Image, Text, Button, Input, InputGroup, Stack, Box, useBreakpointValue } from '@chakra-ui/react';
+import { SimpleGrid, Card, CardHeader, Heading, Image, Text, Button, Input, InputGroup, Stack, Box } from '@chakra-ui/react';
 import Nav from '@/components/Nav';
-import BackButtonPokedex from '@/components/BackButtonPokedex';
+import Link from 'next/link'; // Import Link from next/link
 
 interface Pokemon {
   name: string;
@@ -61,45 +61,39 @@ export default function Pokedex(): JSX.Element {
     window.scrollTo({ top: 0, behavior: 'auto' });
   };
 
-  // Adjust number of columns based on screen size
-  const gridColumnCount = useBreakpointValue({ base: 1, sm: 2, md: 3, lg: 4, xl: 5 });
-
   return (
     <div>
-      <BackButtonPokedex />
-    <div>
-      {/* Pokedex heading and search input */}
-      <Stack px={[4, 40]} spacing={4} justifyContent='space-between' alignItems="center" flexDir={['column', 'row']} mt={10} mb={16}>
+      <Stack px={40} spacing={4} justifyContent='space-between' alignItems="center" flexDir='row' mt={10} mb={16}>
         <Text fontSize={30} fontWeight={600} color="#5AC9A1">Pokedex</Text>
-        <InputGroup w={['100%', 500]}>
+        <InputGroup w={500}>
           <Input type='string' placeholder='Search by Pokemon name, id' />
         </InputGroup>
       </Stack>
 
-      {/* Pokemon */}
-      <SimpleGrid columns={gridColumnCount} spacing={[100]} px={[20, 12, 12, 40]}>
+      <SimpleGrid columns={5} spacing={12} px={40}>
         {pokemons.map(pokemon => (
-          <Card key={pokemon.id} w={'100%'} h={'180%'} position="relative" boxShadow="0 4px 8px 0 rgba(0,0,0,0.2), 4px 0 8px 0 rgba(0,0,0,0.2)">            <CardHeader>
-            <Heading size='md'>{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</Heading>
-            <Text fontWeight="bold" color="gray" fontSize={20}>#{pokemon.id}</Text>
-            </CardHeader>
-            <Image src={pokemon.imageUrl} alt={pokemon.name} boxSize="150px" objectFit="none" transform="scale(1.9)" position="absolute" bottom="-1" right="-2"/>
-          </Card>
+          <Link key={pokemon.id} href={`/${pokemon.id}`} passHref>
+            <Card as="a" w={250} h={180} position="relative" boxShadow="0 4px 8px 0 rgba(0,0,0,0.2), 4px 0 8px 0 rgba(0,0,0,0.2)">
+              <CardHeader>
+                <Heading size='md'>{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</Heading>
+                <Text fontWeight="bold" color="gray" fontSize={20}>#{pokemon.id}</Text>
+              </CardHeader>
+              <Image src={pokemon.imageUrl} alt={pokemon.name} boxSize="150px" objectFit="none" transform="scale(1.9)" position="absolute" bottom="-1" right="-2" />
+            </Card>
+          </Link>
         ))}
       </SimpleGrid>
-      {/* Load Pokemon button */}
-      <Box display="flex" justifyContent="center" mt='16'>
+      <Box display="flex" justifyContent="center">
         {offset > 0 && (
           <Button mb={125} ml={50} mt={16} onClick={loadPreviousPage}>Load Previous 100 Pokémon</Button>
         )}
 
-        {pokemons.length < 649 && ( 
+        {pokemons.length < 649 && (
           <Button mb={125} ml={50} mt={16} onClick={loadNextPage}>Load Next 100 Pokémon</Button>
         )}
       </Box>
-      
-      <Nav/>
-    </div>
+
+      <Nav />
     </div>
   );
 }
