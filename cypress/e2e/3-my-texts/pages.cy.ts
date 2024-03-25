@@ -9,7 +9,7 @@ describe('Navigation', () => {
      
     });
 
-    it('should have', () => {
+    it('should have alt', () => {
         cy.visit('http://localhost:3000/pokemon?name=togepi');
         cy.get('[alt="Official Artwork"]').should('be.visible')
     })
@@ -19,6 +19,12 @@ describe('Navigation', () => {
     
         cy.get('p').invoke('css', 'color').should('include', 'rgb(90, 201, 161)');
     });
+
+    it('check length of button', ()=> {
+        cy.visit('http://localhost:3000/pokedex');
+
+        cy.get('button').should('have.length', '1');
+    })
     
 
   });
