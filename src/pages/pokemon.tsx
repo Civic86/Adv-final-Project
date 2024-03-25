@@ -79,58 +79,66 @@ export default function Pokemon(): JSX.Element {
   };
 
   return (
-    <Box height="100vh" display="flex" flexDirection="column">
-      <BackButton />
-      <Flex flex="1">
-        <Flex
-          bgImage={`/images/${weatherBackgrounds[weatherData.weather]}`}
-          bgSize="cover"
-          bgPosition="center"
-          bgRepeat="no-repeat"
-          flex="1"
-          alignItems="center"
-          justifyContent="center"
-        >
-          {pokemonDetails && pokemonDetails.sprites && pokemonDetails.sprites.other && pokemonDetails.sprites.other['official-artwork'] && (
-            <Image src={pokemonDetails.sprites.other['official-artwork'].front_default} alt="Official Artwork" w={'40%'} mt={4} />
-          )}
-        </Flex>
-        <Flex flex="1" alignItems="flex-start" direction="column" marginLeft='7rem'>
-          {pokemonDetails && (
-            <>
-              <Heading as="h1" fontSize="2xl" mt={10} style={{ textTransform: 'capitalize' }}>{pokemonDetails.name}</Heading>
-              <Text my='2' rounded='md' bg='#8BC5CD' color='white' size='xs' fontWeight='normal' p='1'>type?{pokemonDetails.name}</Text>
-              <SimpleGrid alignItems={'center'} textAlign='center' columns={2} spacing={4} mt={10}>
-                <Box rounded='lg' boxShadow='lg' p='6'>
-                  <Text color={'#A0A0A0'}>Species</Text>
-                  <Text color={'#3AC291'} style={{ textTransform: 'capitalize' }}>{pokemonDetails.species.name}</Text>
-                </Box>
-                <Box rounded='lg' boxShadow='lg' p='6'>
-                  <Text color={'#A0A0A0'}>Abilities</Text>
-                  <Box color={'#3AC291'} style={{ textTransform: 'capitalize' }}>
-                    {pokemonDetails.abilities.map(ability => (
-                      <Text key={ability.ability.name}>{ability.ability.name}</Text>
-                    ))}
-                  </Box>
-                </Box>
-                <Box rounded='lg' boxShadow='lg' p='6'>
-                  <Text color={'#A0A0A0'}>Height</Text>
-                  <Text color={'#3AC291'}>{convertToCentimeters(pokemonDetails.height)} cm</Text>
-                </Box>
-                <Box rounded='lg' boxShadow='lg' p='6'>
-                  <Text color={'#A0A0A0'}>Weight</Text>
-                  <Text color={'#3AC291'}>{convertToKilograms(pokemonDetails.weight)} kg</Text>
-                </Box>
-              </SimpleGrid>
+    <Box minHeight="100vh" display="flex" flexDirection="column">
+  <BackButton />
+  <Flex flex="1" flexDirection={['column', 'column', 'column', 'row']}>
+    {/* Pokemon with background */}
+    <Flex
+  bgImage={`/images/${weatherBackgrounds[weatherData.weather]}`}
+  bgSize="cover"
+  bgPosition="center"
+  bgRepeat="no-repeat"
+  flex="1"
+  alignItems="center"
+  justifyContent="center"
+>
+  {pokemonDetails && pokemonDetails.sprites && pokemonDetails.sprites.other && pokemonDetails.sprites.other['official-artwork'] && (
+    <Image
+      src={pokemonDetails.sprites.other['official-artwork'].front_default}
+      alt="Official Artwork"
+      mt={[0, 4, 4]} // Adjust margin-top for different screen sizes
+      width={['100%', '50%', '40%']} // Set width for different screen sizes
+    />
+  )}
+</Flex>
+    {/* Pokemon information */}
+    <Flex flex="1" alignItems={['center', 'center', 'center', "flex-start"]} justifyContent={['center']} direction="column" ml={['0', '0', '0', '7rem']} px={['4', '4', '4', '0']} pb={['40']}>
+      {pokemonDetails && (
+        <>
+          <Heading as="h1" fontSize={['2xl', '5xl']} mt={['10', '10', '10', '0']} style={{ textTransform: 'capitalize' }}>{pokemonDetails.name}</Heading>
+          <Text my='2' rounded='lg' bg='#8BC5CD' color='white' fontSize={['xs', 'lg']} fontWeight='normal' p='1' px='6'>type?{pokemonDetails.name}</Text>
+          <SimpleGrid alignItems={'center'} textAlign='center' columns={[2]} spacing={4} mt={10}>
+            <Box rounded='lg' boxShadow='lg' p='6'>
+              <Text fontSize={['md', '2xl']} color={'#A0A0A0'}>Species</Text>
+              <Text fontSize={['md', '2xl']} color={'#3AC291'} style={{ textTransform: 'capitalize' }}>{pokemonDetails.species.name}</Text>
+            </Box>
+            <Box rounded='lg' boxShadow='lg' p='6'>
+              <Text fontSize={['md', '2xl']} color={'#A0A0A0'}>Abilities</Text>
+              <Box color={'#3AC291'} style={{ textTransform: 'capitalize' }}>
+                {pokemonDetails.abilities.map(ability => (
+                  <Text fontSize={['md', '2xl']} key={ability.ability.name}>{ability.ability.name}</Text>
+                ))}
+              </Box>
+            </Box>
+            <Box rounded='lg' boxShadow='lg' p='6'>
+              <Text fontSize={['md', '2xl']} color={'#A0A0A0'}>Height</Text>
+              <Text fontSize={['md', '2xl']} color={'#3AC291'}>{convertToCentimeters(pokemonDetails.height)} cm</Text>
+            </Box>
+            <Box rounded='lg' boxShadow='lg' p='6'>
+              <Text fontSize={['md', '2xl']} color={'#A0A0A0'}>Weight</Text>
+              <Text fontSize={['md', '2xl']} color={'#3AC291'}>{convertToKilograms(pokemonDetails.weight)} kg</Text>
+            </Box>
+          </SimpleGrid>
 
-              <Text my='20' style={{ textTransform: 'capitalize' }}>bla</Text>
+          <Text fontSize={['md', '2xl']} my='20' style={{ textTransform: 'capitalize' }}>bla</Text>
 
-              <Button bg='#8BC5CD' color='white' size='lg' fontWeight='normal'><Link href='/pokedex'>Explore More Pokemon</Link></Button>
-            </>
-          )}
-        </Flex>
-      </Flex>
-      <Nav />
-    </Box>
+          <Button bg='#8BC5CD' color='white' size='lg' rounded='xl' fontSize={['xl', '2xl']}  p='8' fontWeight='normal'><Link href='/pokedex'>Explore More Pokemon</Link></Button>
+        </>
+      )}
+    </Flex>
+  </Flex>
+  <Nav />
+</Box>
+
   );
 }
