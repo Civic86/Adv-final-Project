@@ -82,5 +82,13 @@ describe('Navigation', () => {
 
     })
 
+    it('find()', () => {
+        cy.visit('http://localhost:3000/pokedex');
+    cy.get('div').eq(1).find('p').should('have.length', 1)
+    })
+
+
+
+    
   });
   
