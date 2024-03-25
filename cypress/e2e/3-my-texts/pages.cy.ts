@@ -13,5 +13,13 @@ describe('Navigation', () => {
         cy.visit('http://localhost:3000/pokemon?name=togepi');
         cy.get('[alt="Official Artwork"]').should('be.visible')
     })
+
+    it('color check', () => {
+        cy.visit('http://localhost:3000/pokedex');
+    
+        cy.get('p').invoke('css', 'color').should('include', 'rgb(90, 201, 161)');
+    });
+    
+
   });
   
