@@ -15,8 +15,13 @@ const Nav = () => {
         // style={{position:'absolute', bottom: 24}}
       />
         </Link>
-        
 
+        <Image
+        src="/images/logo.svg"
+        width={75}
+        height={75}
+        alt=''
+        />
       
       <Link href="/pokedex">
       <Image

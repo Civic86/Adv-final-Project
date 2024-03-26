@@ -1,28 +1,144 @@
+import axios from 'axios';
 import Nav from '@/components/Nav';
-import { Box, Flex, Heading, SimpleGrid, Text } from '@chakra-ui/react';
-import Link from 'next/link';
+import { Box, Flex, Text, SimpleGrid, Heading, Image, Button, Link } from '@chakra-ui/react';
+import { useRouter } from 'next/router';
+import { useState, useEffect } from 'react';
+import BackButton from '@/components/BackButton';
+import { weatherBackgrounds } from '../../data/information';
+import { WeatherCondition, WeatherData } from '../../typing'
+
+const fetchPokemonData = async (name) => {
+  try {
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error('Failed to fetch Pokémon details');
+  }
+};
 
 export default function Pokemon(): JSX.Element {
+
+  const [weatherData, setWeatherData] = useState<WeatherData>({
+    temp: '',
+    weather: '' as WeatherCondition,
+  });
+
+  const [currentDate, setCurrentDate] = useState<string>('');
+  const router = useRouter();
+  const { name } = router.query;
+  const [pokemonDetails, setPokemonDetails] = useState(null);
+
+  useEffect(() => {
+    const fetchWeather = async () => {
+      try {
+        const apiKey = '94cc376cb7e1d14d4733642775cf5059';
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=Vancouver,ca&units=metric&appid=${apiKey}`;
+        const response = await axios.get(url);
+        const { temp } = response.data.main;
+        const { main } = response.data.weather[0];
+
+        setWeatherData({
+          temp: Math.round(temp).toString(),
+          weather: main as WeatherCondition,
+        });
+      } catch (error) {
+        console.error('Failed to fetch weather data:', error);
+      }
+    };
+
+    fetchWeather();
+
+    const date = new Date();
+    const options = { weekday: 'long', month: 'short', day: 'numeric' } as const;
+    setCurrentDate(date.toLocaleDateString('en-US', options));
+
+  }, []);
+
+  useEffect(() => {
+    const fetchPokemonDetails = async () => {
+      try {
+        const data = await fetchPokemonData(name);
+        setPokemonDetails(data);
+      } catch (error) {
+        console.error('Failed to fetch Pokémon details:', error);
+      }
+    };
+
+    if (name) {
+      fetchPokemonDetails();
+    }
+  }, [router.query]);
+
+  const convertToCentimeters = (decimeters) => {
+    return decimeters * 10; // 1 decimeter = 10 centimeters
+  };
+
+  const convertToKilograms = (hectograms) => {
+    return hectograms / 10; // 1 hectogram = 100 grams = 0.1 kilograms
+  };
+
   return (
-    <Box>
-      <Flex>
-        <Flex flex={4} bg="blue.100" alignItems="center" direction={'column'} justifyContent="center">
-          <Link href="/">
-            <Box w={200} h={200} bg="green.100" borderRadius="50%"></Box>
-          </Link>
-        </Flex>
-          <Flex flex={6} alignItems="center" minH="100vh" direction={'column'}>
-            <Text fontSize={40} mt={10}>Ditto</Text>
-            <SimpleGrid columns={3} spacing={10} width="80%">
-              <Box bg='tomato' textAlign="center" height={14}>Wind</Box>
-              <Box bg='tomato' textAlign="center" height={14}>Humidity</Box>
-              <Box bg='tomato' textAlign="center" height={14}>Visibility</Box>
-              <Box bg='tomato' textAlign="center" height={14}>Precipitation</Box>
-              <Box bg='tomato' textAlign="center" height={14}>Precipitation</Box>
-            </SimpleGrid>
-        </Flex>
-      </Flex>
-      <Nav/>
-    </Box>
+    <Box minHeight="100vh" display="flex" flexDirection="column">
+  <BackButton />
+  <Flex flex="1" flexDirection={['column', 'column', 'column', 'row']}>
+    {/* Pokemon with background */}
+    <Flex
+  bgImage={`/images/${weatherBackgrounds[weatherData.weather]}`}
+  bgSize="cover"
+  bgPosition="center"
+  bgRepeat="no-repeat"
+  flex="1"
+  alignItems="center"
+  justifyContent="center"
+>
+  {pokemonDetails && pokemonDetails.sprites && pokemonDetails.sprites.other && pokemonDetails.sprites.other['official-artwork'] && (
+    <Image
+      src={pokemonDetails.sprites.other['official-artwork'].front_default}
+      alt="Official Artwork"
+      mt={[0, 4, 4]}
+      width={['100%', '50%', '40%']} // Set width for different screen sizes
+    />
+  )}
+</Flex>
+    {/* Pokemon information */}
+    <Flex flex="1" alignItems={['center', 'center', 'center', "flex-start"]} justifyContent={['center']} direction="column" ml={['0', '0', '0', '7rem']} px={['4', '4', '4', '0']} pb={['40']}>
+      {pokemonDetails && (
+        <>
+          <Heading as="h1" fontSize={['2xl', '5xl']} mt={['10', '10', '10', '0']} style={{ textTransform: 'capitalize' }}>{pokemonDetails.name}</Heading>
+          <Text my='2' rounded='lg' bg='#8BC5CD' color='white' fontSize={['xs', 'lg']} fontWeight='normal' p='1' px='6'>type?{pokemonDetails.name}</Text>
+          <SimpleGrid alignItems={'center'} textAlign='center' columns={[2]} spacing={4} mt={10}>
+            <Box rounded='lg' boxShadow='lg' p='6'>
+              <Text fontSize={['md', '2xl']} color={'#A0A0A0'}>Species</Text>
+              <Text fontSize={['md', '2xl']} color={'#3AC291'} style={{ textTransform: 'capitalize' }}>{pokemonDetails.species.name}</Text>
+            </Box>
+            <Box rounded='lg' boxShadow='lg' p='6'>
+              <Text fontSize={['md', '2xl']} color={'#A0A0A0'}>Abilities</Text>
+              <Box color={'#3AC291'} style={{ textTransform: 'capitalize' }}>
+                {pokemonDetails.abilities.map(ability => (
+                  <Text fontSize={['md', '2xl']} key={ability.ability.name}>{ability.ability.name}</Text>
+                ))}
+              </Box>
+            </Box>
+            <Box rounded='lg' boxShadow='lg' p='6'>
+              <Text fontSize={['md', '2xl']} color={'#A0A0A0'}>Height</Text>
+              <Text fontSize={['md', '2xl']} color={'#3AC291'}>{convertToCentimeters(pokemonDetails.height)} cm</Text>
+            </Box>
+            <Box rounded='lg' boxShadow='lg' p='6'>
+              <Text fontSize={['md', '2xl']} color={'#A0A0A0'}>Weight</Text>
+              <Text fontSize={['md', '2xl']} color={'#3AC291'}>{convertToKilograms(pokemonDetails.weight)} kg</Text>
+            </Box>
+          </SimpleGrid>
+
+          <Text fontSize={['md', '2xl']} my='20' style={{ textTransform: 'capitalize' }}>bla</Text>
+
+          <Button bg='#8BC5CD' color='white' size='lg' rounded='xl' fontSize={['xl', '2xl']}  p='8' fontWeight='normal'><Link href='/pokedex'>Explore More Pokemon</Link></Button>
+        </>
+      )}
+    </Flex>
+  </Flex>
+  <Nav />
+</Box>
+
   );
 }
