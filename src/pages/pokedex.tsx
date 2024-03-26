@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { SimpleGrid, Card, CardHeader, Heading, Image, Text, Button, Input, InputGroup, Stack, Box } from '@chakra-ui/react';
 import Nav from '@/components/Nav';
-import Link from 'next/link'; // Import Link from next/link
+import Link from 'next/link';
 
 interface Pokemon {
   name: string;
@@ -19,7 +19,7 @@ export default function Pokedex(): JSX.Element {
   useEffect(() => {
     const fetchPokemons = async () => {
       if (offset > 649) {
-        return; // Stop fetching if offset exceeds 649
+        return;
       }
 
       if (pokemonCache[offset]) {
@@ -32,7 +32,7 @@ export default function Pokedex(): JSX.Element {
       let data = await response.json();
       for (const pokemon of data.results) {
         if (offset + allPokemonData.length + 1 > 649) {
-          break; // Stop generating if Pokémon ID exceeds 649
+          break;
         }
         response = await fetch(pokemon.url);
         const pokemonData = await response.json();
@@ -89,11 +89,6 @@ export default function Pokedex(): JSX.Element {
     </Link>
   ))}
 </SimpleGrid>
-
-
-
-
-
       <Box display="flex" justifyContent="center">
         {offset > 0 && (
           <Button mb={125} ml={50} mt={16} onClick={loadPreviousPage}>Load Previous 100 Pokémon</Button>

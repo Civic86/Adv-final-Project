@@ -12,7 +12,6 @@ const Nav = () => {
         width={70}
         height={70}
         alt='homeIcon'
-        // style={{position:'absolute', bottom: 24}}
       />
         </Link>
 
@@ -22,14 +21,12 @@ const Nav = () => {
         height={75}
         alt=''
         />
-      
       <Link href="/pokedex">
       <Image
         src="/images/bookIcon.svg"
         width={70}
         height={70}
-        alt='bookIcon' 
-        // style={{position:'absolute', bottom: 24}}
+        alt='bookIcon'
       />
       </Link>
     </Box>

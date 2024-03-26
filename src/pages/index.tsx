@@ -104,8 +104,8 @@ export default function Index(): JSX.Element {
           {pokemonDetails && (
             <Link href={`/pokemon?name=${pokemonDetails.name}&type=${pokemonDetails.type}`}>
               {randomPokemonImageUrl && (
-                <Image 
-                src={randomPokemonImageUrl} 
+                <Image
+                src={randomPokemonImageUrl}
                 alt="Random Pokémon"
                 width={['80%', '100%', '100%', '100%']}
                 />
