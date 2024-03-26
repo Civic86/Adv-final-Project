@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 const Nav = () => {
   return (
-    <Box bg="#5AC9A1" display="flex" alignItems="center" justifyContent="space-evenly" width='100vw' pos="fixed" bottom="0" py={2} overflow='visible'>
+    <Box bg="#5AC9A1" display="flex" alignItems="center" justifyContent="space-evenly" width='100%' pos="fixed" bottom="0" py={2} overflow='visible'>
         <Link href="/">
         <Image
         src="/images/homeIcon.svg"
