@@ -54,7 +54,7 @@ export default function Pokemon(): JSX.Element {
   const { name } = router.query;
   const [pokemonDetails, setPokemonDetails] = useState(null);
   const [pokedexDescription, setPokedexDescription] = useState<string>('');
-  const [pokemonTypes, setPokemonTypes] = useState<string[]>([]); // Define pokemonTypes state here
+  const [pokemonTypes, setPokemonTypes] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchWeather = async () => {
@@ -94,31 +94,29 @@ export default function Pokemon(): JSX.Element {
 
     const fetchData = async () => {
       try {
-        // Fetch Pokémon details
+       
         await fetchPokemonDetails();
     
-        // Fetch Pokédex description
+       
         const pokedexData = await fetchPokedexDescription(name);
         if (pokedexData && pokedexData.flavor_text_entries && pokedexData.flavor_text_entries.length > 0) {
           const description = pokedexData.flavor_text_entries.find(entry => entry.language.name === 'en');
           if (description) {
-            // Replace the up arrow character with a space character
-            const cleanDescription = description.flavor_text.replace(/\/g, ' ');
+                const cleanDescription = description.flavor_text.replace(/\/g, ' ');
     
-            // Split the description into sentences
-            const sentences = cleanDescription.split('. ');
+                    const sentences = cleanDescription.split('. ');
     
-            // Capitalize the first letter of each sentence
+           
             const capitalizedSentences = sentences.map(sentence => sentence.charAt(0).toUpperCase() + sentence.slice(1));
     
-            // Join the sentences back together
+           
             const formattedDescription = capitalizedSentences.join('. ');
     
             setPokedexDescription(formattedDescription);
           }
         }
     
-        // Fetch Pokémon type
+       
         const types = await fetchPokemonType(name);
         setPokemonTypes(types);
       } catch (error) {
@@ -134,11 +132,11 @@ export default function Pokemon(): JSX.Element {
 
 
   const convertToCentimeters = (decimeters) => {
-    return decimeters * 10; // 1 decimeter = 10 centimeters
+    return decimeters * 10; 
   };
 
   const convertToKilograms = (hectograms) => {
-    return hectograms / 10; // 1 hectogram = 100 grams = 0.1 kilograms
+    return hectograms / 10;
   };
 
   return (
@@ -160,7 +158,7 @@ export default function Pokemon(): JSX.Element {
       src={pokemonDetails.sprites.other['official-artwork'].front_default}
       alt="Official Artwork"
       mt={[0, 4, 4]}
-      width={['60%', '50%', '40%']} // Set width for different screen sizes
+      width={['60%', '50%', '40%']} 
     />
   )}
 </Flex>
@@ -184,7 +182,7 @@ export default function Pokemon(): JSX.Element {
               <Text
                 my='2'
                 rounded='lg'
-                bg={typeColors[pokemonTypes[0]]} // Set background color dynamically based on Pokémon type
+                bg={typeColors[pokemonTypes[0]]} 
                 color='white'
                 fontSize={['xs', 'lg']}
                 fontWeight='normal'
@@ -201,7 +199,7 @@ export default function Pokemon(): JSX.Element {
                   key={index}
                   my='2'
                   rounded='lg'
-                  bg={typeColors[type]} // Set background color dynamically based on Pokémon type
+                  bg={typeColors[type]} 
                   color='white'
                   fontSize={['xs', 'lg']}
                   fontWeight='normal'

@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { Box, Flex, Text, SimpleGrid, Heading, Image, Button, Link } from '@chakra-ui/react';
 import BackButton from '@/components/BackButton';
 import { weatherBackgrounds } from '../../data/information';
-import { typeColors } from '../../data/information'; // Assuming typeColors are defined here
+import { typeColors } from '../../data/information';
 import { WeatherCondition } from '../../typing';
 import Nav from '@/components/Nav';
 
@@ -119,7 +119,7 @@ export default function PokemonDetails(): JSX.Element {
               src={pokemonDetails.sprites.other['official-artwork'].front_default}
               alt="Official Artwork"
               mt={[0, 4, 4]}
-              width={['60%', '50%', '40%']} // Set width for different screen sizes
+              width={['60%', '50%', '40%']} 
             />
           )}
         </Flex>
@@ -142,7 +142,7 @@ export default function PokemonDetails(): JSX.Element {
                   <Text
                     my='2'
                     rounded='lg'
-                    bg={typeColors[pokemonTypes[0]]} // Set background color dynamically based on Pokémon type
+                    bg={typeColors[pokemonTypes[0]]} 
                     color='white'
                     fontSize={['xs', 'lg']}
                     fontWeight='normal'
@@ -159,7 +159,7 @@ export default function PokemonDetails(): JSX.Element {
                       key={index}
                       my='2'
                       rounded='lg'
-                      bg={typeColors[type]} // Set background color dynamically based on Pokémon type
+                      bg={typeColors[type]} 
                       color='white'
                       fontSize={['xs', 'lg']}
                       fontWeight='normal'
