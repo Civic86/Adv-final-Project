@@ -98,14 +98,17 @@ export default function Index(): JSX.Element {
       bgSize="cover"
       bgPosition="center"
       bgRepeat="no-repeat"
-      p={4}
     >
       <Flex color='white' flexDir={{ base: 'column', md: 'row' }}>
-        <Flex flex={{ base: 1, md: 2 }} alignItems="center" direction={'column'} justifyContent="center" mt={{ base: 4, md: 0 }}>
+        <Flex flex={{ base: 1, md: 2 }} direction={'column'} alignItems="center" justifyContent="center" mt={{ base: 4, md: 0 }} ml={{ base: 28, md: 0 }}>
           {pokemonDetails && (
             <Link href={`/pokemon?name=${pokemonDetails.name}&type=${pokemonDetails.type}`}>
               {randomPokemonImageUrl && (
-                <Image src={randomPokemonImageUrl} alt="Random Pokémon" />
+                <Image 
+                src={randomPokemonImageUrl} 
+                alt="Random Pokémon"
+                width={['80%', '100%', '100%', '100%']}
+                />
               )}
             </Link>
           )}
@@ -121,11 +124,11 @@ export default function Index(): JSX.Element {
             <Text fontSize={{ base: 48, md: 87 }} my={4}>{weatherData.temp}°C</Text>
           </Flex>
           <Text fontSize={{ base: 20, md: 30 }}>{weatherData.weather}</Text>
-          <Text fontSize={{ base: 20, md: 30 }} mt={-2} mb={6}>{currentDate}</Text>
+          <Text fontSize={{ base: 20, md: 30 }} mt={'-2'} mb={6}>{currentDate}</Text>
 
           <Grid
             templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' }}
-            gap={10}
+            gap={[5, 10, 10, 10]}
             width="80%"
             autoFlow="row dense"
           >
@@ -139,7 +142,7 @@ export default function Index(): JSX.Element {
               alignItems="center"
               justifyContent="center"
               color="white"
-              py={4}
+              py={[4, 4, 4, 8]}
             >
               Wind: {weatherData.wind} m/s
             </GridItem>
@@ -152,7 +155,7 @@ export default function Index(): JSX.Element {
               display="flex"
               alignItems="center"
               justifyContent="center"
-              py={4}
+              py={[4, 4, 4, 8]}
             >
               Humidity: {weatherData.humidity}%
             </GridItem>
@@ -165,7 +168,7 @@ export default function Index(): JSX.Element {
               display="flex"
               alignItems="center"
               justifyContent="center"
-              py={4}
+              py={[4, 4, 4, 8]}
             >
               Visibility: {weatherData.visibility} m
             </GridItem>
@@ -178,7 +181,7 @@ export default function Index(): JSX.Element {
               display="flex"
               alignItems="center"
               justifyContent="center"
-              py={4}
+              py={[4, 4, 4, 8]}
             >
               Precipitation: {weatherData.precipitation} mm
             </GridItem>
