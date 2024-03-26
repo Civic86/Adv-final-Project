@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import { useState, useEffect } from 'react';
 import BackButton from '@/components/BackButton';
 import { weatherBackgrounds } from '../../data/information';
-import { WeatherCondition, WeatherData } from '../../typing'
+import { WeatherCondition, WeatherData } from '../../typing';
 
 const fetchPokemonData = async (name) => {
   try {
@@ -16,6 +16,29 @@ const fetchPokemonData = async (name) => {
     throw new Error('Failed to fetch Pokémon details');
   }
 };
+
+const fetchPokedexDescription = async (name) => {
+  try {
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon-species/${name}`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Failed to fetch Pokédex description:', error);
+    return null;
+  }
+};
+
+const fetchPokemonType = async (name) => {
+  try {
+    const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${name}`);
+    const data = await response.json();
+    return data.types.map(type => type.type.name);
+  } catch (error) {
+    console.error('Failed to fetch Pokémon type:', error);
+    return [];
+  }
+};
+
 
 export default function Pokemon(): JSX.Element {
 
@@ -28,6 +51,8 @@ export default function Pokemon(): JSX.Element {
   const router = useRouter();
   const { name } = router.query;
   const [pokemonDetails, setPokemonDetails] = useState(null);
+  const [pokedexDescription, setPokedexDescription] = useState<string>('');
+  const [pokemonTypes, setPokemonTypes] = useState<string[]>([]); // Define pokemonTypes state here
 
   useEffect(() => {
     const fetchWeather = async () => {
@@ -65,10 +90,43 @@ export default function Pokemon(): JSX.Element {
       }
     };
 
+    const fetchData = async () => {
+      try {
+        // Fetch Pokémon details
+        await fetchPokemonDetails();
+
+        // Fetch Pokédex description
+        const pokedexData = await fetchPokedexDescription(name);
+        if (pokedexData && pokedexData.flavor_text_entries && pokedexData.flavor_text_entries.length > 0) {
+          const description = pokedexData.flavor_text_entries.find(entry => entry.language.name === 'en');
+          if (description) {
+            // Split the description into sentences
+            const sentences = description.flavor_text.split('. ');
+        
+            // Capitalize the first letter of each sentence
+            const capitalizedSentences = sentences.map(sentence => sentence.charAt(0).toUpperCase() + sentence.slice(1));
+        
+            // Join the sentences back together
+            const formattedDescription = capitalizedSentences.join('. ');
+        
+            setPokedexDescription(formattedDescription);
+          }
+        }
+
+        // Fetch Pokémon type
+        const types = await fetchPokemonType(name);
+        setPokemonTypes(types);
+      } catch (error) {
+        console.error('Failed to fetch Pokémon details:', error);
+      }
+    };
+
     if (name) {
-      fetchPokemonDetails();
+      fetchData();
     }
-  }, [router.query]);
+  }, [name]);
+
+
 
   const convertToCentimeters = (decimeters) => {
     return decimeters * 10; // 1 decimeter = 10 centimeters
@@ -79,19 +137,19 @@ export default function Pokemon(): JSX.Element {
   };
 
   return (
-    <Box minHeight="100vh" display="flex" flexDirection="column">
+  <Box minHeight="100vh" display="flex" flexDirection="column">
   <BackButton />
   <Flex flex="1" flexDirection={['column', 'column', 'column', 'row']}>
     {/* Pokemon with background */}
     <Flex
-  bgImage={`/images/${weatherBackgrounds[weatherData.weather]}`}
-  bgSize="cover"
-  bgPosition="center"
-  bgRepeat="no-repeat"
-  flex="1"
-  alignItems="center"
-  justifyContent="center"
->
+    bgImage={`/images/${weatherBackgrounds[weatherData.weather]}`}
+    bgSize="cover"
+    bgPosition="center"
+    bgRepeat="no-repeat"
+    flex="1"
+    alignItems="center"
+    justifyContent="center"
+  >
   {pokemonDetails && pokemonDetails.sprites && pokemonDetails.sprites.other && pokemonDetails.sprites.other['official-artwork'] && (
     <Image
       src={pokemonDetails.sprites.other['official-artwork'].front_default}
@@ -106,7 +164,7 @@ export default function Pokemon(): JSX.Element {
       {pokemonDetails && (
         <>
           <Heading as="h1" fontSize={['2xl', '5xl']} mt={['10', '10', '10', '0']} style={{ textTransform: 'capitalize' }}>{pokemonDetails.name}</Heading>
-          <Text my='2' rounded='lg' bg='#8BC5CD' color='white' fontSize={['xs', 'lg']} fontWeight='normal' p='1' px='6'>type?{pokemonDetails.name}</Text>
+          <Text my='2' rounded='lg' bg='#8BC5CD' color='white' fontSize={['xs', 'lg']} fontWeight='normal' p='1' px='6'>{pokemonDetails.type}</Text>
           <SimpleGrid alignItems={'center'} textAlign='center' columns={[2]} spacing={4} mt={10}>
             <Box rounded='lg' boxShadow='lg' p='6'>
               <Text fontSize={['md', '2xl']} color={'#A0A0A0'}>Species</Text>
@@ -130,7 +188,7 @@ export default function Pokemon(): JSX.Element {
             </Box>
           </SimpleGrid>
 
-          <Text fontSize={['md', '2xl']} my='20' style={{ textTransform: 'capitalize' }}>bla</Text>
+          <Text fontSize={['md', '2xl']} my='20' style={{ textTransform: 'capitalize' }}>{pokedexDescription}</Text>
 
           <Button bg='#8BC5CD' color='white' size='lg' rounded='xl' fontSize={['xl', '2xl']}  p='8' fontWeight='normal'><Link href='/pokedex'>Explore More Pokemon</Link></Button>
         </>

@@ -15,7 +15,7 @@ export default function Pokedex(): JSX.Element {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
   const [offset, setOffset] = useState(0);
   const limit = 100;
-  
+
   useEffect(() => {
     const fetchPokemons = async () => {
       if (offset > 649) {
@@ -63,26 +63,37 @@ export default function Pokedex(): JSX.Element {
 
   return (
     <div>
-      <Stack px={40} spacing={4} justifyContent='space-between' alignItems="center" flexDir='row' mt={10} mb={16}>
+      <Stack px={40} spacing={4} justifyContent='space-between' alignItems="center" flexDir={['column', 'column', 'row', 'row']} mt={10} mb={[10, 12,16,16]}>
         <Text fontSize={30} fontWeight={600} color="#5AC9A1">Pokedex</Text>
-        <InputGroup w={500}>
+        <InputGroup w={[350, 500, 500, 500]}>
           <Input type='string' placeholder='Search by Pokemon name, id' />
         </InputGroup>
       </Stack>
 
-      <SimpleGrid columns={5} spacing={12} px={40}>
-        {pokemons.map(pokemon => (
-          <Link key={pokemon.id} href={`/${pokemon.id}`} passHref>
-            <Card as="a" w={250} h={180} position="relative" boxShadow="0 4px 8px 0 rgba(0,0,0,0.2), 4px 0 8px 0 rgba(0,0,0,0.2)">
-              <CardHeader>
-                <Heading size='md'>{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</Heading>
-                <Text fontWeight="bold" color="gray" fontSize={20}>#{pokemon.id}</Text>
-              </CardHeader>
-              <Image src={pokemon.imageUrl} alt={pokemon.name} boxSize="150px" objectFit="none" transform="scale(1.9)" position="absolute" bottom="-1" right="-2" />
-            </Card>
-          </Link>
-        ))}
-      </SimpleGrid>
+      <SimpleGrid columns={[2, 3, 3, 5]} spacing={[7, 7, 7, 12]} px={[8, 12, 16, 20]}>
+  {pokemons.map(pokemon => (
+    <Link key={pokemon.id} href={`/${pokemon.id}`} passHref>
+      <Card
+        as="a"
+        w={[175, 175, 200, 250]}
+        h={[130, 130, 140, 180]}
+        position="relative"
+        boxShadow="0 4px 8px 0 rgba(0,0,0,0.2), 4px 0 8px 0 rgba(0,0,0,0.2)"
+      >
+        <CardHeader>
+          <Heading size={['sm', 'sm',  'md', 'md']}>{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</Heading>
+          <Text fontWeight="bold" color="gray" fontSize={[10, 12, 16, 20]}>#{pokemon.id}</Text>
+        </CardHeader>
+        <Image src={pokemon.imageUrl} alt={pokemon.name} boxSize={["110px", "120px", "120px", "140px"]} objectFit="none" transform={["scale(1.2)", "scale(1.3)", "scale(1.5)", "scale(1.8)"]} position="absolute" bottom="-1" right="-2" />
+      </Card>
+    </Link>
+  ))}
+</SimpleGrid>
+
+
+
+
+
       <Box display="flex" justifyContent="center">
         {offset > 0 && (
           <Button mb={125} ml={50} mt={16} onClick={loadPreviousPage}>Load Previous 100 Pokémon</Button>
