@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { Box, Flex, Text, SimpleGrid, Heading, Image, Button, Link } from '@chakra-ui/react';
 import BackButton from '@/components/BackButton';
 import { weatherBackgrounds } from '../../data/information';
+import { typeColors } from '../../data/information'; // Assuming typeColors are defined here
 import { WeatherCondition } from '../../typing';
 import Nav from '@/components/Nav';
 
@@ -37,7 +38,6 @@ const fetchPokemonType = async (id: string) => {
     return [];
   }
 };
-
 
 export default function PokemonDetails(): JSX.Element {
   const [weatherData, setWeatherData] = useState({
@@ -80,7 +80,8 @@ export default function PokemonDetails(): JSX.Element {
         if (pokedex && pokedex.flavor_text_entries && pokedex.flavor_text_entries.length > 0) {
           const description = pokedex.flavor_text_entries.find(entry => entry.language.name === 'en');
           if (description) {
-            setPokedexDescription(description.flavor_text);
+            const cleanDescription = description.flavor_text.replace(/\/g, ' ');
+            setPokedexDescription(cleanDescription);
           }
         }
         if (pokemon && pokemon.types && pokemon.types.length > 0) {
@@ -91,7 +92,6 @@ export default function PokemonDetails(): JSX.Element {
         console.error('Failed to fetch Pokémon details:', error);
       }
     };
-
     if (id) {
       fetchData();
     }
@@ -106,37 +106,81 @@ export default function PokemonDetails(): JSX.Element {
       <Flex flex="1" flexDirection={['column', 'column', 'column', 'row']}>
         {/* Pokemon with background */}
         <Flex
-        bgImage={`/images/${weatherBackgrounds[weatherData.weather]}`}
-        bgSize="cover"
-        bgPosition="center"
-        bgRepeat="no-repeat"
-        flex="1"
-        alignItems="center"
-        justifyContent="center"
-      >
-      {pokemonDetails && pokemonDetails.sprites && pokemonDetails.sprites.other && pokemonDetails.sprites.other['official-artwork'] && (
-        <Image
-          src={pokemonDetails.sprites.other['official-artwork'].front_default}
-          alt="Official Artwork"
-          mt={[0, 4, 4]}
-          width={['100%', '50%', '40%']} // Set width for different screen sizes
-          boxSize={['400px', '400px', '400px']} // Adjust the boxSize for larger scale
-          objectFit="cover"
-        />
-      )}
-    </Flex>
+          bgImage={`/images/${weatherBackgrounds[weatherData.weather]}`}
+          bgSize="cover"
+          bgPosition="center"
+          bgRepeat="no-repeat"
+          flex="1"
+          alignItems="center"
+          justifyContent="center"
+        >
+          {pokemonDetails && pokemonDetails.sprites && pokemonDetails.sprites.other && pokemonDetails.sprites.other['official-artwork'] && (
+            <Image
+              src={pokemonDetails.sprites.other['official-artwork'].front_default}
+              alt="Official Artwork"
+              mt={[0, 4, 4]}
+              width={['60%', '50%', '40%']} // Set width for different screen sizes
+            />
+          )}
+        </Flex>
         {/* Pokemon information */}
         <Flex flex="1" alignItems={['center', 'center', 'center', "flex-start"]} justifyContent={['center']} direction="column" ml={['0', '0', '0', '7rem']} px={['4', '4', '4', '0']} pb={['40']}>
           {pokemonDetails && (
             <>
-              <Heading as="h1" fontSize={['2xl', '5xl']} mt={['10', '10', '10', '0']} style={{ textTransform: 'capitalize' }}>{pokemonDetails.name}</Heading>
-              <Text my='2' rounded='lg' bg='#8BC5CD' color='white' fontSize={['xs', 'lg']} fontWeight='normal' p='1' px='6'>{pokemonDetails.type}</Text>
-              <SimpleGrid alignItems={'center'} textAlign='center' columns={[2]} spacing={4} mt={10}>
-                <Box rounded='lg' boxShadow='lg' p='6'>
+              <Heading as="h1" fontSize={['2xl', '5xl']} mt={['6', '10', '10', '20']} style={{ textTransform: 'capitalize' }}>{pokemonDetails.name}</Heading>
+
+              <Flex
+                flex="1"
+                height="fit-content"
+                overflow="hidden"
+                flexDirection="row"
+                alignItems="center"
+                justifyContent="center"
+
+              >
+                {pokemonTypes.length === 1 ? (
+                  <Text
+                    my='2'
+                    rounded='lg'
+                    bg={typeColors[pokemonTypes[0]]} // Set background color dynamically based on Pokémon type
+                    color='white'
+                    fontSize={['xs', 'lg']}
+                    fontWeight='normal'
+                    p='1'
+                    px='6'
+                    width='fit-content'
+                    style={{ textTransform: 'capitalize' }}
+                  >
+                    {pokemonTypes[0]}
+                  </Text>
+                ) : (
+                  pokemonTypes.map((type, index) => (
+                    <Text
+                      key={index}
+                      my='2'
+                      rounded='lg'
+                      bg={typeColors[type]} // Set background color dynamically based on Pokémon type
+                      color='white'
+                      fontSize={['xs', 'lg']}
+                      fontWeight='normal'
+                      p='1'
+                      px='6'
+                      width='fit-content'
+                      marginRight={index !== pokemonTypes.length - 1 ? '10px' : '0'}
+                      style={{ textTransform: 'capitalize' }}
+                    >
+                      {type}
+                    </Text>
+                  ))
+                )}
+              </Flex>
+
+              <SimpleGrid alignItems={'center'} textAlign='center' columns={[2]} spacing={['0']} mb={['0']}>
+                <Box rounded='lg' boxShadow='lg' p={['4', '4', '6', '8']}>
                   <Text fontSize={['md', '2xl']} color={'#A0A0A0'}>Species</Text>
                   <Text fontSize={['md', '2xl']} color={'#3AC291'} style={{ textTransform: 'capitalize' }}>{pokemonDetails.species.name}</Text>
                 </Box>
-                <Box rounded='lg' boxShadow='lg' p='6'>
+                <Box rounded='lg' boxShadow='lg' p={['4', '4', '6', '8']}>
                   <Text fontSize={['md', '2xl']} color={'#A0A0A0'}>Abilities</Text>
                   <Box color={'#3AC291'} style={{ textTransform: 'capitalize' }}>
                     {pokemonDetails.abilities.map(ability => (
@@ -144,24 +188,24 @@ export default function PokemonDetails(): JSX.Element {
                     ))}
                   </Box>
                 </Box>
-                <Box rounded='lg' boxShadow='lg' p='6'>
+                <Box rounded='lg' boxShadow='lg' p={['4', '4', '6', '8']}>
                   <Text fontSize={['md', '2xl']} color={'#A0A0A0'}>Height</Text>
                   <Text fontSize={['md', '2xl']} color={'#3AC291'}>{convertToCentimeters(pokemonDetails.height)} cm</Text>
                 </Box>
-                <Box rounded='lg' boxShadow='lg' p='6'>
+                <Box rounded='lg' boxShadow='lg' p={['4', '4', '6', '8']}>
                   <Text fontSize={['md', '2xl']} color={'#A0A0A0'}>Weight</Text>
                   <Text fontSize={['md', '2xl']} color={'#3AC291'}>{convertToKilograms(pokemonDetails.weight)} kg</Text>
                 </Box>
               </SimpleGrid>
 
-              <Text fontSize={['md', '2xl']} my='20' style={{ textTransform: 'capitalize' }}>{pokedexDescription}</Text>
+              <Text fontSize={['md', '2xl']} my={['10', '10', '10', '20']} px={['4', '4', '10', '0']} pr={['0', '0', '0', '12']}>{pokedexDescription}</Text>
 
-              <Button bg='#8BC5CD' color='white' size='lg' rounded='xl' fontSize={['xl', '2xl']}  p='8' fontWeight='normal'><Link href='/pokedex'>Explore More Pokemon</Link></Button>
+              <Button bg='#8BC5CD' color='white' size='lg' rounded='xl' fontSize={['xl', '2xl']} p={['6', '6', '8', '8']} fontWeight='normal'><Link href='/pokedex'>Explore More Pokemon</Link></Button>
             </>
           )}
         </Flex>
       </Flex>
-    <Nav />
-  </Box>
+      <Nav />
+    </Box>
   );
 }
