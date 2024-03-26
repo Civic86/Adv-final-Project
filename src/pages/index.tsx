@@ -35,16 +35,6 @@ export default function Index(): JSX.Element {
       }
     };
 
-
-    const loadRandomPokemonImage = async () => {
-      const pokemonType = getWeatherBasedPokemonType(weatherData.weather); 
-      const pokemonImageUrl = await fetchRandomPokemonImage(pokemonType);
-      if (pokemonImageUrl) {
-        setRandomPokemonImageUrl(pokemonImageUrl);
-      }
-    };
-    loadRandomPokemonImage();
-
     fetchWeather();
 
     const date = new Date();
@@ -53,31 +43,12 @@ export default function Index(): JSX.Element {
 
   }, []);
 
-
-  const getWeatherBasedPokemonType = (weather: WeatherCondition): string => {
-    switch (weather) {
-      case 'Clear':
-        return 'normal', 'fire', 'fighting', 'flying';
-      case 'Clouds':
-        return 'fairy', 'poison', 'bug' ;
-      case 'Drizzle':
-      case 'Rain':
-        return 'water';
-      case 'Snow':
-        return 'ice';
-      case 'Thunder':
-        return 'electric';
-      default:
-        return 'normal';
-
   useEffect(() => {
     // console.log("Weather:", weatherData.weather);
     // console.log("Random Pokemon Image URL:", randomPokemonImageUrl);
     //the commented out code can be used to help check if the weather type and the pokemon type are being fetched correctly
-  
     if (weatherData.weather !== '' && !randomPokemonImageUrl) {
       loadRandomPokemonImage(weatherData.weather);
-
     }
   }, [weatherData.weather, randomPokemonImageUrl]);
 
@@ -125,14 +96,14 @@ export default function Index(): JSX.Element {
           <Text fontSize={30} mt={-2} mb={6}>{currentDate}</Text>
 
           <SimpleGrid columns={2} spacing={10} width="80%">
-            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='rgba(0,0,0,0.5)' align='center' justify='center'>Wind</Flex>
-            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='rgba(0,0,0,0.5)' align='center' justify='center'>Humidity</Flex>
-            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='rgba(0,0,0,0.5)' align='center' justify='center'>Visibility</Flex>
-            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='rgba(0,0,0,0.5)' align='center' justify='center'>Precipitation</Flex>
+            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center' style={{ color: "white" }}>Wind</Flex>
+            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Humidity</Flex>
+            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Visibility</Flex>
+            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Precipitation</Flex>
           </SimpleGrid>
         </Flex>
         <Flex flex={1} alignItems="center" direction={'column'} justifyContent="center">
-          
+
           {pokemonDetails && (
             <Link href={`/pokemon?name=${pokemonDetails.name}&type=${pokemonDetails.type}`}>
               {randomPokemonImageUrl && (
