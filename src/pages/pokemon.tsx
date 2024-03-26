@@ -160,7 +160,7 @@ export default function Pokemon(): JSX.Element {
       src={pokemonDetails.sprites.other['official-artwork'].front_default}
       alt="Official Artwork"
       mt={[0, 4, 4]}
-      width={['100%', '50%', '40%']} // Set width for different screen sizes
+      width={['60%', '50%', '40%']} // Set width for different screen sizes
     />
   )}
 </Flex>
@@ -168,7 +168,7 @@ export default function Pokemon(): JSX.Element {
     <Flex flex="1" alignItems={['center', 'center', 'center', "flex-start"]} justifyContent={['center']} direction="column" ml={['0', '0', '0', '7rem']} px={['4', '4', '4', '0']} pb={['40']}>
       {pokemonDetails && (
         <>
-          <Heading as="h1" fontSize={['2xl', '5xl']} mt={['10', '10', '10', '0']} style={{ textTransform: 'capitalize' }}>{pokemonDetails.name}</Heading>
+          <Heading as="h1" fontSize={['2xl', '5xl']} mt={['6', '10', '10', '20']} style={{ textTransform: 'capitalize' }}>{pokemonDetails.name}</Heading>
           
           <Flex
             flex="1"
@@ -177,6 +177,7 @@ export default function Pokemon(): JSX.Element {
             flexDirection="row"
             alignItems="center"
             justifyContent="center"
+            mb={['0', '2', '2', '20']}
             
           >
             {pokemonTypes.length === 1 ? (
@@ -216,12 +217,12 @@ export default function Pokemon(): JSX.Element {
             )}
           </Flex>
         
-          <SimpleGrid alignItems={'center'} textAlign='center' columns={[2]} spacing={4} mt={10}>
-            <Box rounded='lg' boxShadow='lg' p='6'>
+          <SimpleGrid alignItems={'center'} textAlign='center' columns={[2]} spacing={['0']} mb={['0']}>
+            <Box rounded='lg' boxShadow='lg' p={['4', '4', '6', '8']}>
               <Text fontSize={['md', '2xl']} color={'#A0A0A0'}>Species</Text>
               <Text fontSize={['md', '2xl']} color={'#3AC291'} style={{ textTransform: 'capitalize' }}>{pokemonDetails.species.name}</Text>
             </Box>
-            <Box rounded='lg' boxShadow='lg' p='6'>
+            <Box rounded='lg' boxShadow='lg' p={['4', '4', '6', '8']}>
               <Text fontSize={['md', '2xl']} color={'#A0A0A0'}>Abilities</Text>
               <Box color={'#3AC291'} style={{ textTransform: 'capitalize' }}>
                 {pokemonDetails.abilities.map(ability => (
@@ -229,19 +230,19 @@ export default function Pokemon(): JSX.Element {
                 ))}
               </Box>
             </Box>
-            <Box rounded='lg' boxShadow='lg' p='6'>
+            <Box rounded='lg' boxShadow='lg' p={['4', '4', '6', '8']}>
               <Text fontSize={['md', '2xl']} color={'#A0A0A0'}>Height</Text>
               <Text fontSize={['md', '2xl']} color={'#3AC291'}>{convertToCentimeters(pokemonDetails.height)} cm</Text>
             </Box>
-            <Box rounded='lg' boxShadow='lg' p='6'>
+            <Box rounded='lg' boxShadow='lg' p={['4', '4', '6', '8']}>
               <Text fontSize={['md', '2xl']} color={'#A0A0A0'}>Weight</Text>
               <Text fontSize={['md', '2xl']} color={'#3AC291'}>{convertToKilograms(pokemonDetails.weight)} kg</Text>
             </Box>
           </SimpleGrid>
 
-          <Text fontSize={['md', '2xl']} my='20'>{pokedexDescription}</Text>
+          <Text fontSize={['md', '2xl']} my={['10', '10', '10', '20']} px={['4', '4', '10', '0']} pr={['0', '0', '0', '12']}>{pokedexDescription}</Text>
 
-          <Button bg='#8BC5CD' color='white' size='lg' rounded='xl' fontSize={['xl', '2xl']}  p='8' fontWeight='normal'><Link href='/pokedex'>Explore More Pokemon</Link></Button>
+          <Button bg='#8BC5CD' color='white' size='lg' rounded='xl' fontSize={['xl', '2xl']} p={['6', '6', '8', '8']} fontWeight='normal'><Link href='/pokedex'>Explore More Pokemon</Link></Button>
         </>
       )}
     </Flex>
