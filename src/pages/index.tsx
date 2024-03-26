@@ -2,13 +2,22 @@ import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import Nav from '@/components/Nav';
 import { Pokemon, Type } from 'pokeapi-typescript';
-import { WeatherCondition, WeatherData } from '../../typing';
+import { Forecast, WeatherCondition, WeatherData } from '../../typing';
 import { weatherIcons, weatherBackgrounds, getWeatherBasedPokemonType } from '../../data/information';
-import { Box, Flex, Text, SimpleGrid, Image } from '@chakra-ui/react';
+import { Box, Flex, Text, SimpleGrid, Image, GridItem, Grid } from '@chakra-ui/react';
 import Link from 'next/link';
 
 export default function Index(): JSX.Element {
   const [weatherData, setWeatherData] = useState<WeatherData>({
+    temp: '',
+    weather: '' as WeatherCondition,
+    wind: '',
+    windSpeed: '',
+    humidity: '',
+    visibility: '',
+    precipitation: '',
+  });
+  const [forecast, setForecast] = useState<Forecast>({
     temp: '',
     weather: '' as WeatherCondition,
   });
@@ -25,11 +34,21 @@ export default function Index(): JSX.Element {
         const response = await axios.get(url);
         const { temp } = response.data.main;
         const { main } = response.data.weather[0];
+        const { speed } = response.data.wind;
+        const { humidity } = response.data.main;
+        const { visibility } = response.data;
+        const { precipitation } = response.data;
 
-        setWeatherData({
+        setWeatherData((prevData) => ({
+          ...prevData,
           temp: Math.round(temp).toString(),
           weather: main as WeatherCondition,
-        });
+          wind: speed.toString(),
+          windSpeed: '',
+          humidity: humidity.toString(),
+          visibility: visibility.toString(),
+          precipitation: precipitation ? precipitation['1h'] : '0',
+        }));
       } catch (error) {
         console.error('Failed to fetch weather data:', error);
       }
@@ -43,11 +62,9 @@ export default function Index(): JSX.Element {
 
   }, []);
 
+
   useEffect(() => {
-    // console.log("Weather:", weatherData.weather);
-    // console.log("Random Pokemon Image URL:", randomPokemonImageUrl);
-    //the commented out code can be used to help check if the weather type and the pokemon type are being fetched correctly
-    if (weatherData.weather !== '' && !randomPokemonImageUrl) {
+    if (weatherData.weather && !randomPokemonImageUrl) {
       loadRandomPokemonImage(weatherData.weather);
     }
   }, [weatherData.weather, randomPokemonImageUrl]);
@@ -80,30 +97,11 @@ export default function Index(): JSX.Element {
     <Box bgImage={`/images/${weatherBackgrounds[weatherData.weather]}`}
       bgSize="cover"
       bgPosition="center"
-      bgRepeat="no-repeat">
-      <Flex color='white'>
-        <Flex flex={1} alignItems="center" minH="100vh" direction={'column'}>
-          <Text fontSize={40} fontWeight={600} mt={10}>Vancouver, BC</Text>
-          <Flex alignItems="center" gap={10}>
-            <Image
-              height={100}
-              src={`/images/${weatherIcons[weatherData.weather]}`}
-              alt={'weather icon'}
-            />
-            <Text fontSize={87} my={4}>{weatherData.temp}°C</Text>
-          </Flex>
-          <Text fontSize={30}>{weatherData.weather}</Text>
-          <Text fontSize={30} mt={-2} mb={6}>{currentDate}</Text>
-
-          <SimpleGrid columns={2} spacing={10} width="80%">
-            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center' style={{ color: "white" }}>Wind</Flex>
-            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Humidity</Flex>
-            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Visibility</Flex>
-            <Flex bg='rgba(128,128,128,0.5)' textAlign="center" height={16} borderRadius='0.5em' backgroundColor='black' opacity='50%' align='center' justify='center'>Precipitation</Flex>
-          </SimpleGrid>
-        </Flex>
-        <Flex flex={1} alignItems="center" direction={'column'} justifyContent="center">
-
+      bgRepeat="no-repeat"
+      p={4}
+    >
+      <Flex color='white' flexDir={{ base: 'column', md: 'row' }}>
+        <Flex flex={{ base: 1, md: 2 }} alignItems="center" direction={'column'} justifyContent="center" mt={{ base: 4, md: 0 }}>
           {pokemonDetails && (
             <Link href={`/pokemon?name=${pokemonDetails.name}&type=${pokemonDetails.type}`}>
               {randomPokemonImageUrl && (
@@ -112,8 +110,83 @@ export default function Index(): JSX.Element {
             </Link>
           )}
         </Flex>
+        <Flex flex={{ base: 1, md: 3 }} alignItems="center" minH="100vh" flexDirection="column">
+          <Text fontSize={{ base: 24, md: 40 }} fontWeight={600} mt={10}>Vancouver, BC</Text>
+          <Flex alignItems="center" gap={10}>
+            <Image
+              height={{ base: 50, md: 100 }}
+              src={`/images/${weatherIcons[weatherData.weather]}`}
+              alt={'weather icon'}
+            />
+            <Text fontSize={{ base: 48, md: 87 }} my={4}>{weatherData.temp}°C</Text>
+          </Flex>
+          <Text fontSize={{ base: 20, md: 30 }}>{weatherData.weather}</Text>
+          <Text fontSize={{ base: 20, md: 30 }} mt={-2} mb={6}>{currentDate}</Text>
+
+          <Grid
+            templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)' }}
+            gap={10}
+            width="80%"
+            autoFlow="row dense"
+          >
+            <GridItem
+              bg='rgba(128,128,128,0.5)'
+              textAlign="center"
+              borderRadius='0.5em'
+              backgroundColor='black'
+              opacity='50%'
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              color="white"
+              py={4}
+            >
+              Wind: {weatherData.wind} m/s
+            </GridItem>
+            <GridItem
+              bg='rgba(128,128,128,0.5)'
+              textAlign="center"
+              borderRadius='0.5em'
+              backgroundColor='black'
+              opacity='50%'
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              py={4}
+            >
+              Humidity: {weatherData.humidity}%
+            </GridItem>
+            <GridItem
+              bg='rgba(128,128,128,0.5)'
+              textAlign="center"
+              borderRadius='0.5em'
+              backgroundColor='black'
+              opacity='50%'
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              py={4}
+            >
+              Visibility: {weatherData.visibility} m
+            </GridItem>
+            <GridItem
+              bg='rgba(128,128,128,0.5)'
+              textAlign="center"
+              borderRadius='0.5em'
+              backgroundColor='black'
+              opacity='50%'
+              display="flex"
+              alignItems="center"
+              justifyContent="center"
+              py={4}
+            >
+              Precipitation: {weatherData.precipitation} mm
+            </GridItem>
+          </Grid>
+        </Flex>
       </Flex>
       <Nav />
     </Box>
   );
+
 }
